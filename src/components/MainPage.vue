@@ -8,7 +8,10 @@
             :columns="table.columns"
             :rows="table.rows"
             :total="table.totalRecordCount"
+            :is-hide-paging="false"
+            :hide-default-footer="true"
             :sortable="table.sortable"
+            @do-search="doSearch"
             class="table">
         </VueTableLite>
     </div>
@@ -16,8 +19,8 @@
 
 <script>
 import VueTableLite from 'vue3-table-lite'
-import { onMounted, reactive, ref } from 'vue';
-// import EquipmentService from '@/api/EquipmentService'
+import { ref, reactive } from 'vue';
+import EquipmentService from '@/api/EquipmentService'
 
 export default {
     name: 'MainPage',
@@ -54,7 +57,7 @@ export default {
             },
             {
                 label: 'Мат. ответственный',
-                field: 'equipment_responsible_name',
+                field: 'equipment_responsible_full_name',
                 width: '15%',
                 sortable: true,
                 headerStyles: {background: '#1c274c'}
@@ -62,6 +65,13 @@ export default {
             {
                 label: 'Структурное подразделение',
                 field: 'division_name',
+                width: '15%',
+                sortable: true,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Номер аудитории',
+                field: 'equipment_responsible_position',
                 width: '15%',
                 sortable: true,
                 headerStyles: {background: '#1c274c'}
@@ -81,29 +91,29 @@ export default {
                 headerStyles: {background: '#1c274c'}
             },
             ],
-            rows: equipmentList.value,
+            rows: [],
             totalRecordCount: 0,
             sortable: {
             order: 'id',
             sort: 'asc',
             },
         });
-        onMounted(() => {
+
+        const doSearch = (limit, offset, order, sort) => {
             table.isLoading = true;
-            for (let i = 0; i < 20; i++) {
-                equipmentList.value.push({
-                    equipment_id: i,
-                    equipment_name: 'TEST' + i,
-                    inventory_number: i+1000000,
-                    equipment_responsible_name: 'TestTest' + i,
-                    division_name:'Division' + i,
-                    equipment_type_name:'type' + i,
-                    equipment_status_name:'status_' + i
-            }); 
-        }  //EquipmentService.getEquipmentList()
-            table.isLoading = false;
-        })
-        return { table }
+            EquipmentService.getEquipmentList(order, sort)
+            .then(res => { 
+                res.forEach(elem => {
+                    equipmentList.value.push(elem)
+                });
+                table.rows = res;
+                table.sortable.order = order;
+                table.sortable.sort = sort;
+                table.isLoading = false;
+             })
+        }
+        doSearch(0,10,'equipment_id', 'asc');
+        return { table, doSearch }
     },
 }
 </script>
@@ -127,13 +137,15 @@ export default {
         border: none;
         background: none;
         margin-left: auto;
-        padding: 10px;
+        padding: 0;
     }
 
     img {
         border-radius: 50%;
         width: 40px;
         height: 40px;
+        padding: 0;
+        margin: 0;
     }
 
     img:hover {
