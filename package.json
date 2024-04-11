@@ -11,9 +11,12 @@
     "axios": "^1.6.8",
     "core-js": "^3.8.3",
     "dotenv": "^16.4.5",
+    "sass": "^1.74.1",
+    "sass-loader": "^14.1.1",
     "vue": "^3.2.13",
     "vue-router": "^4.3.0",
-    "vue3-table-lite": "^1.4.0"
+    "vue3-table-lite": "^1.4.0",
+    "vuejs-confirm-dialog": "^0.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

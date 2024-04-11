@@ -1,37 +1,48 @@
 <template>
     <div class="main-container">
-        <button type="submit" class="add_row" title="Добавить оборудование">
-            <img src="../assets/add-circle-svgrepo-com.svg" alt="add" >
+        <button type="submit" class="add_row" title="Добавить оборудование" @click="showModal">
         </button>
         <VueTableLite
             :is-loading="table.isLoading"
             :columns="table.columns"
             :rows="table.rows"
+            :rowClasses="table.rowClasses"
             :total="table.totalRecordCount"
-            :is-hide-paging="false"
+            :is-hide-paging="true"
             :hide-default-footer="true"
             :sortable="table.sortable"
             @do-search="doSearch"
+            @row-clicked="rowClicked"
             class="table">
         </VueTableLite>
     </div>
+    <DialogPage :showModal="isVisible" @closeModal="closeModal"/>
 </template>
 
 <script>
-import VueTableLite from 'vue3-table-lite'
+import VueTableLite from 'vue3-table-lite';
 import { ref, reactive } from 'vue';
-import EquipmentService from '@/api/EquipmentService'
+import EquipmentService from '@/api/EquipmentService';
+import DialogPage from './DialogPage.vue';
 
 export default {
     name: 'MainPage',
     components: { 
-        VueTableLite 
+        VueTableLite,
+        DialogPage,
     },
     setup() {
+        const isVisible = ref(false)
         const equipmentList = ref([]);
       // Инициализация настроек таблицы
         const table = reactive({
             isLoading: false,
+            rowClasses: (row) => {
+                if (row.id == 1) {
+                return ["aaa", "is-id-one"];
+                }
+                return ["bbb", "other"];
+            },
             columns: [
             {
                 label: 'ID',
@@ -98,7 +109,8 @@ export default {
             sort: 'asc',
             },
         });
-
+        // Функция сортировки данных в таблице. Для сортировки используются переменные order и sort.
+        // limit и offset были добавлены, так как этого требует функция.
         const doSearch = (limit, offset, order, sort) => {
             table.isLoading = true;
             EquipmentService.getEquipmentList(order, sort)
@@ -113,7 +125,20 @@ export default {
              })
         }
         doSearch(0,10,'equipment_id', 'asc');
-        return { table, doSearch }
+
+        const rowClicked = (row) => {
+            console.log(row);
+        };
+
+        const showModal = () => {
+            isVisible.value = true;
+        };
+
+        const closeModal = () => {
+            isVisible.value = false;
+        };
+
+        return { table, doSearch, rowClicked, isVisible, showModal, closeModal }
     },
 }
 </script>
@@ -128,29 +153,27 @@ export default {
     }
 
     .table {
-        margin: 20px;
+        margin: auto;
     }
 
     .add_row {
-        width: fit-content;
-        height: fit-content;
-        border: none;
-        background: none;
-        margin-left: auto;
-        padding: 0;
-    }
-
-    img {
         border-radius: 50%;
         width: 40px;
         height: 40px;
-        padding: 0;
-        margin: 0;
+        border: none;
+        background: none;
+        background-image: url('../assets/add-circle-svgrepo-com.svg');
+        background-size: cover;
+        margin-left: auto;
+        margin-top: 10px;
+        margin-right: 10px;
     }
 
-    img:hover {
+    .add_row:hover {
         cursor: pointer;
     }
+
+
     
     .bg_dark-blue {
         background: #1c274c !important;
