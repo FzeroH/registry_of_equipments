@@ -16,7 +16,7 @@
             class="table">
         </VueTableLite>
     </div>
-    <DialogPage :showModal="isVisible" @closeModal="closeModal"/>
+    <DialogPage :showModal="isVisible" @closeModal="closeModal" />
 </template>
 
 <script>

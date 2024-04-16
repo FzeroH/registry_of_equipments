@@ -13,30 +13,21 @@
                 placeholder="Введите инвентарный номер оборудования" 
                 v-model="inventoryNumber">
             </label>
-            <lable for="equipment_responsible_full_name"></lable>
-            <select name="" id="equipment_responsible_full_name">
-                <option selected>{{ baseData.equipmentResponsibleFullName }}</option>
-                <option>TEST</option>
-                <option>TEST</option>
-                <option>TEST</option>
+            <select v-model="selectedResponsible" id="equipment_responsible_full_name">
+                <option value="" disabled selected>{{ baseData.equipmentResponsibleFullName }}</option>
+                <option v-for="(item, index) in responsibleList" :value="item" :key="index" >{{ item.equipment_responsible_full_name }} ({{ item.equipment_responsible_position }})</option>
             </select>
-            <lable for="equipment_status_name"></lable>
-            <select name="" id="equipment_status_name">
-                <option selected>{{ baseData.equipmentStatusName }}</option>
-                <option>TEST</option>
-                <option>TEST</option>
-                <option>TEST</option>
+            <select v-model="selectedStatus" id="equipment_status_name">
+                <option value="" disabled selected>{{ baseData.equipmentStatusName }}</option>
+                <option v-for="(item, index) in statusList" :value="item" :key="index" >{{ item.equipment_status_name }}</option>
             </select>
-            <lable for="equipment_type_name"></lable>
-            <select name="" id="equipment_type_name">
-                <option selected>{{ baseData.equipmentStatusName }}</option>
-                <option>TEST</option>
-                <option>TEST</option>
-                <option>TEST</option>
+            <select v-model="selectedType" id="equipment_type_name">
+                <option value="" disabled selected>{{ baseData.equipmentTypeName }}</option>
+                <option v-for="(item, index) in typesList" :value="item" :key="index" >{{ item.equipment_type_name }}</option>
             </select>
             <div class="button-block">
-                <button @click="closeModal">Добавить</button>
-                <button @click="closeModal">Изменить</button>
+                <button @click="addEquipment" v-if="isNewEquipment">Добавить</button>
+                <button @click="closeModal" v-if="!isNewEquipment">Изменить</button>
                 <button @click="closeModal">Закрыть</button>
             </div>
         </div>
@@ -45,7 +36,8 @@
  
 <script>
 /* eslint-disable */
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, onMounted } from 'vue';
+import EquipmentService from '@/api/EquipmentService';
 
     export default {
         name: "ModalWindow",
@@ -53,26 +45,72 @@ import { ref, defineEmits } from 'vue'
             showModal: {
                 type: Boolean,
                 default: false,
-            }
+            },
+            isNewEquipment: {
+                type: Boolean,
+                default: true,
+            },
         },
         setup(props, { emit }) {
-
+            /* данные для заполнения первой строки */
             const baseData = {
                 equipmentResponsibleFullName: 'ФИО мат. ответственного',
                 equipmentStatusName: 'Статус оборудования',
                 equipmentTypeName: 'Тип оборудования',
             }
-            
+            /* переменные для получения информации из формы */
             const equipmentName = ref('');
             const inventoryNumber = ref('');
+            const selectedType = ref();
+            const selectedStatus = ref();
+            const selectedResponsible = ref();
+
+            /* Массивы данных, полученных из базы */
+            const typesList = ref([]);
+            const statusList = ref([]);
+            const responsibleList = ref([]);
 
             const closeModal = () => {
                 equipmentName.value = '';
                 inventoryNumber.value = '';
                 emit('closeModal', false);
             }
+            
+            const addEquipment = async () => {
+                const data = {
+                equipmentName: equipmentName.value,
+                inventoryNumber: inventoryNumber.value,
+                selectedType: selectedType.value,
+                selectedStatus: selectedStatus.value,
+                selectedResponsible: selectedResponsible.value,
+            };
+            await EquipmentService.addEquipment(data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber); 
+            closeModal();
+            console.log('WoRK!');
+        }
+
+            onMounted(()=> {
+                EquipmentService.getEquipmentTypeList().then(res => {
+                    res.forEach(elem => {
+                        typesList.value.push(elem)
+                    });
+                })
+                EquipmentService.getEquipmentStatusList().then(res => {
+                    res.forEach(elem => {
+                        statusList.value.push(elem)
+                    });
+                })
+                EquipmentService.getEquipmentResponsibleList().then(res => {
+                    res.forEach(elem => {
+                        responsibleList.value.push(elem)
+                    });
+                })
+            })
         
-            return { equipmentName, inventoryNumber, baseData, closeModal }
+            return { equipmentName, inventoryNumber, baseData, 
+                closeModal, addEquipment,
+                typesList, statusList, 
+                responsibleList, selectedType, selectedResponsible, selectedStatus }
         }
     }
 </script>
