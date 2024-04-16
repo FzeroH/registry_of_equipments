@@ -68,31 +68,31 @@ class EquipmentService {
 
     /* Обновить данные */
     static updateEquipment = (equipment_id, equipment_type_id, equipment_status_id, equipment_responsible_id, equipment_name, inventory_number) => new Promise((resolve, reject) => {
-        instance.post('/equipments', { equipment_id, equipment_type_id, equipment_status_id, equipment_responsible_id, equipment_name, inventory_number })
+        instance.put('/equipments', { equipment_id, equipment_type_id, equipment_status_id, equipment_responsible_id, equipment_name, inventory_number })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
     static updateEquipmentStatusList = () => new Promise((resolve, reject) => {
-        instance.post('/status')
+        instance.put('/status')
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
     static updateEquipmentTypeList = () => new Promise((resolve, reject) => {
-        instance.post('/types')
+        instance.put('/types')
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
     static updateEquipmentResponsibleList = () => new Promise((resolve, reject) => {
-        instance.post('/responsible')
+        instance.put('/responsible')
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
     static updateDivisionList = () => new Promise((resolve, reject) => {
-        instance.post('/division')
+        instance.put('/division')
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
