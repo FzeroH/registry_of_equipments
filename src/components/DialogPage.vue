@@ -1,7 +1,8 @@
 <template>
     <div class="modal" v-if="showModal">
         <div class="modal-content">
-            <h2>Название</h2>
+            <h2 v-if="isNewEquipment">Добавить оборудование</h2>
+            <h2 v-else>Изменить оборудование</h2>
             <label for="equipment_name">
                 <input id="equipment_name" 
                 type="text" 
@@ -64,21 +65,6 @@ import EquipmentService from '@/api/EquipmentService';
             }
 
             /* переменные для получения информации из формы */
-            // const equipmentName = ref(props.isNewEquipment? '' : props.oldData.equipment_name);
-            // const inventoryNumber = ref(props.isNewEquipment? '' : props.oldData.inventory_number);
-            // const selectedType = ref(props.isNewEquipment? {} : { 
-            //     equipment_type_id: props.oldData.equipment_type_id, 
-            //     equipment_type_name: props.oldData.equipment_type_name 
-            // });
-            // const selectedStatus = ref(props.isNewEquipment? {} : { 
-            //     equipment_status_id: props.oldData.equipment_status_id, 
-            //     equipment_status_name: props.oldData.equipment_status_name 
-            // });
-            // const selectedResponsible = ref(props.isNewEquipment? {} : { 
-            //     equipment_responsible_id: props.oldData.equipment_responsible_id, 
-            //     equipment_responsible_full_name: props.oldData.equipment_responsible_full_name
-            // });
-
             const equipmentName = ref('');
             const inventoryNumber = ref('');
             const selectedType = ref({});
@@ -90,29 +76,45 @@ import EquipmentService from '@/api/EquipmentService';
             const statusList = ref([]);
             const responsibleList = ref([]);
 
-            const computedEquipmentName = computed(() => {
-                return props.isNewEquipment? equipmentName.value : props.oldData.equipment_name;
+            const computedEquipmentName = computed({
+                get() {
+                    return props.isNewEquipment? equipmentName.value : props.oldData.equipment_name;
+                },
+                set: (value) => { equipmentName.value = value } 
+
             });
-            const computedInventoryNumber = computed(() => {
-                return props.isNewEquipment? inventoryNumber.value : props.oldData.inventory_number
+            const computedInventoryNumber = computed({
+                get() { 
+                    return props.isNewEquipment? inventoryNumber.value : props.oldData.inventory_number;
+                },
+                set: (value) => { inventoryNumber.value = value } 
             });
-            const computedSelectedType = computed(() => {
+            const computedSelectedType = computed( {
+                get() { 
                     return props.isNewEquipment? selectedType.value : { 
-                    equipment_type_id: props.oldData.equipment_type_id, 
-                    equipment_type_name: props.oldData.equipment_type_name 
+                        equipment_type_id: props.oldData.equipment_type_id, 
+                        equipment_type_name: props.oldData.equipment_type_name 
                 };
+                },
+                set: (value) => { selectedType.value = value } 
             });
-            const computedSelectedStatus = computed(() => {
+            const computedSelectedStatus = computed({
+                get() { 
                     return props.isNewEquipment? selectedStatus.value : { 
-                    equipment_status_id: props.oldData.equipment_status_id, 
-                    equipment_status_name: props.oldData.equipment_status_name 
-                };
+                        equipment_status_id: props.oldData.equipment_status_id, 
+                        equipment_status_name: props.oldData.equipment_status_name 
+                    };
+                },
+                set: (value) => { selectedStatus.value = value } 
             });
-            const computedSelectedResponsible = computed(() => {
+            const computedSelectedResponsible = computed({
+                get() {
                     return props.isNewEquipment? selectedResponsible.value : { 
-                    equipment_responsible_id: props.oldData.equipment_responsible_id, 
-                    equipment_responsible_full_name: props.oldData.equipment_responsible_full_name
-                }
+                        equipment_responsible_id: props.oldData.equipment_responsible_id, 
+                        equipment_responsible_full_name: props.oldData.equipment_responsible_full_name
+                    }
+                },
+                set: (value) => { selectedResponsible.value = value } 
             });
 
             const closeModal = () => {
@@ -121,7 +123,6 @@ import EquipmentService from '@/api/EquipmentService';
                 selectedType.value = {};
                 selectedStatus.value = {};
                 selectedResponsible.value = {};
-                console.log(props.oldData);
                 emit('closeModal', false);
             }
             
@@ -133,6 +134,7 @@ import EquipmentService from '@/api/EquipmentService';
                 selectedStatus: selectedStatus.value,
                 selectedResponsible: selectedResponsible.value,
             };
+            console.log(data)
             await EquipmentService.addEquipment(data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber); 
             closeModal();
         }
@@ -146,7 +148,7 @@ import EquipmentService from '@/api/EquipmentService';
             };
                 console.log(data);
                 try {
-                    EquipmentService.updateEquipment(props.oldData.equipment_id,data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber)
+                    // EquipmentService.updateEquipment(props.oldData.equipment_id,data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber)
                 }
                 catch(e) {
                     console.log(e);
