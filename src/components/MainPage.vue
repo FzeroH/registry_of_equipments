@@ -16,7 +16,7 @@
             class="table">
         </VueTableLite>
     </div>
-    <DialogPage :showModal="isVisible" @closeModal="closeModal" />
+    <DialogPage :showModal="isVisible" @closeModal="closeModal" :isNewEquipment="isNewEquipment" :oldData="oldData" />
 </template>
 
 <script>
@@ -32,7 +32,10 @@ export default {
         DialogPage,
     },
     setup() {
-        const isVisible = ref(false)
+        const isVisible = ref(false);
+        const isNewEquipment = ref(true);
+        const oldData = ref({});
+
         const equipmentList = ref([]);
       // Инициализация настроек таблицы
         const table = reactive({
@@ -127,18 +130,24 @@ export default {
         doSearch(0,10,'equipment_id', 'asc');
 
         const rowClicked = (row) => {
-            console.log(row);
+            oldData.value = row;
+            isNewEquipment.value = false;
+            isVisible.value = true;
+            // console.log(row);
         };
 
         const showModal = () => {
+            isNewEquipment.value = true;
             isVisible.value = true;
         };
 
+
         const closeModal = () => {
             isVisible.value = false;
+            oldData.value = {};
         };
 
-        return { table, doSearch, rowClicked, isVisible, showModal, closeModal }
+        return { table, doSearch, rowClicked, isVisible, showModal, closeModal, isNewEquipment, oldData }
     },
 }
 </script>
