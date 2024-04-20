@@ -7,22 +7,24 @@
                 <input id="equipment_name" 
                 type="text" 
                 placeholder="Введите название оборудования" 
-                v-model="computedEquipmentName">
+                v-model="computedEquipmentName"
+                 class="equipment-field">
             </label><label for="input2">
                 <input id="inventory_number" 
                 type="text" 
                 placeholder="Введите инвентарный номер оборудования" 
-                v-model="computedInventoryNumber">
+                v-model="computedInventoryNumber"
+                 class="equipment-field">
             </label>
-            <select v-model="computedSelectedResponsible" id="equipment_responsible_full_name">
+            <select v-model="computedSelectedResponsible" id="equipment_responsible_full_name" class="equipment-field">
                 <option value="" disabled selected>{{ baseData.equipmentResponsibleFullName }}</option>
                 <option v-for="(item, index) in responsibleList" :value="item" :key="index" >{{ item.equipment_responsible_full_name }}</option>  <!--({{ item.equipment_responsible_position }}) -->
             </select>
-            <select v-model="computedSelectedStatus" id="equipment_status_name">
+            <select v-model="computedSelectedStatus" id="equipment_status_name" class="equipment-field">
                 <option value="" disabled selected>{{ baseData.equipmentStatusName }}</option>
                 <option v-for="(item, index) in statusList" :value="item" :key="index" >{{ item.equipment_status_name }}</option>
             </select>
-            <select v-model="computedSelectedType" id="equipment_type_name">
+            <select v-model="computedSelectedType" id="equipment_type_name" class="equipment-field">
                 <option value="" disabled selected>{{ baseData.equipmentTypeName }}</option>
                 <option v-for="(item, index) in typesList" :value="item" :key="index" >{{ item.equipment_type_name }}</option>
             </select>
@@ -218,19 +220,50 @@ import EquipmentService from '@/api/EquipmentService';
         border-radius: 5px; 
     } 
 
-    input, select { 
-        width: 30rem;
+    h2 {
+        font-size: 20px;
+        color: #1c274c;
+        font-weight: bold;
+        margin: auto;
+        padding-bottom: 20px;
+    }
+    input {
+        width: 400px;
+    }
+    select {
+        width: 408px;
+    }
+    .equipment-field {
+        height: 40px;
+        font-size: 16px;
         margin-bottom: 10px;
-    } 
+        border: 1px solid black;
+        border-radius: 5px;
+        outline: none;
+        
+    }
 
     .button-block {
         width: 100%;
         display: flex;
         flex-direction: row;
+        justify-content: space-around;
     }
 
-    button { 
-        max-width: 10rem;
-        margin-top: 10px; 
-    } 
+    button {
+        background: #1c274c;
+        outline: none;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        padding: 10px 20px;
+        transition: 0.5s ease;
+    }
+
+    button:hover {
+        cursor: pointer;
+        transition: 0.5 ease;
+        background: #314483;
+    }
+
 </style>
