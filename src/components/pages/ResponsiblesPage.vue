@@ -23,7 +23,7 @@
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DialogPage from './DialogPage.vue';
+import DialogPage from '../DialogModalPage.vue';
 
 export default {
     name: 'ResponsiblesPage',
@@ -157,7 +157,7 @@ export default {
         height: 40px;
         border: none;
         background: none;
-        background-image: url('../assets/add-circle-svgrepo-com.svg');
+        background-image: url('../../assets/add-circle-svgrepo-com.svg');
         background-size: cover;
         margin-left: auto;
         margin-top: 10px;

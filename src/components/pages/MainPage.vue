@@ -16,25 +16,25 @@
             class="table">
         </VueTableLite>
     </div>
-    <DialogPage :showModal="isVisible" @closeModal="closeModal" :isNewEquipment="isNewEquipment" :oldData="oldData" />
+    <DialogModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewEquipment="isNewEquipment" :oldData="oldData" />
 </template>
 
 <script>
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DialogPage from './DialogPage.vue';
+import DialogModalPage from '../DialogModalPage.vue';
 
 export default {
     name: 'MainPage',
     components: { 
         VueTableLite,
-        DialogPage,
+        DialogModalPage,
     },
     setup() {
         const isVisible = ref(false);
         const isNewEquipment = ref(true);
-        const oldData = ref({});
+        const oldData = ref(null);
 
         const equipmentList = ref([]);
       // Инициализация настроек таблицы
@@ -133,7 +133,7 @@ export default {
             oldData.value = row;
             isNewEquipment.value = false;
             isVisible.value = true;
-            // console.log(row);
+            console.log(row);
         };
 
         const showModal = () => {
@@ -171,7 +171,7 @@ export default {
         height: 40px;
         border: none;
         background: none;
-        background-image: url('../assets/add-circle-svgrepo-com.svg');
+        background-image: url('../../assets/add-circle-svgrepo-com.svg');
         background-size: cover;
         margin-left: auto;
         margin-top: 10px;

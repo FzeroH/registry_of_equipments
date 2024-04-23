@@ -7,31 +7,35 @@
                 <input id="equipment_name" 
                 type="text" 
                 placeholder="Введите название оборудования" 
-                v-model="computedEquipmentName"
+                v-model="equipmentName"
                  class="equipment-field">
             </label><label for="input2">
                 <input id="inventory_number" 
                 type="text" 
                 placeholder="Введите инвентарный номер оборудования" 
-                v-model="computedInventoryNumber"
+                v-model="inventoryNumber"
                  class="equipment-field">
             </label>
-            <select v-model="computedSelectedResponsible" id="equipment_responsible_full_name" class="equipment-field">
-                <option value="" disabled selected>{{ baseData.equipmentResponsibleFullName }}</option>
+            
+            <select v-model="selectedResponsible" id="equipment_responsible_full_name" class="equipment-field">
+                <option :value="null" disabled selected>{{ baseData.equipmentResponsibleFullName }}</option>
                 <option v-for="(item, index) in responsibleList" :value="item" :key="index" >{{ item.equipment_responsible_full_name }}</option>  <!--({{ item.equipment_responsible_position }}) -->
             </select>
-            <select v-model="computedSelectedStatus" id="equipment_status_name" class="equipment-field">
-                <option value="" disabled selected>{{ baseData.equipmentStatusName }}</option>
+
+            <select v-model="selectedStatus" id="equipment_status_name" class="equipment-field">
+                <option :value="null" disabled selected>{{ baseData.equipmentStatusName }}</option>
                 <option v-for="(item, index) in statusList" :value="item" :key="index" >{{ item.equipment_status_name }}</option>
             </select>
-            <select v-model="computedSelectedType" id="equipment_type_name" class="equipment-field">
-                <option value="" disabled selected>{{ baseData.equipmentTypeName }}</option>
+
+            <select v-model="selectedType" id="equipment_type_name" class="equipment-field">
+                <option :value="null" disabled selected>{{ baseData.equipmentTypeName }}</option>
                 <option v-for="(item, index) in typesList" :value="item" :key="index" >{{ item.equipment_type_name }}</option>
             </select>
+
             <div class="button-block">
-                <button type="submit" @click="addEquipment" v-if="isNewEquipment">Добавить</button>
+                <button @click="addEquipment" v-if="isNewEquipment">Добавить</button>
                 <button @click="updateEqipment" v-if="!isNewEquipment">Изменить</button>
-                <button @click="closeModal">Закрыть</button>
+                <button @click="closeModal">Закрыть</button> 
             </div>
         </div>
     </div>
@@ -39,7 +43,7 @@
  
 <script>
 /* eslint-disable */
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
 
     export default {
@@ -55,7 +59,7 @@ import EquipmentService from '@/api/EquipmentService';
             },
             oldData: {
                 type: Object,
-                default: {},
+                default: null,
             },
         },
         setup(props, { emit }) {
@@ -69,62 +73,21 @@ import EquipmentService from '@/api/EquipmentService';
             /* переменные для получения информации из формы */
             const equipmentName = ref('');
             const inventoryNumber = ref('');
-            const selectedType = ref({});
-            const selectedStatus = ref({});
-            const selectedResponsible = ref({});
+            const selectedType = ref(null);
+            const selectedStatus = ref(null);
+            const selectedResponsible = ref(null);
 
             /* Массивы данных, полученных из базы */
             const typesList = ref([]);
             const statusList = ref([]);
             const responsibleList = ref([]);
 
-            const computedEquipmentName = computed({
-                get() {
-                    return props.isNewEquipment? equipmentName.value : props.oldData.equipment_name;
-                },
-                set: (value) => { equipmentName.value = value } 
-
-            });
-            const computedInventoryNumber = computed({
-                get() { 
-                    return props.isNewEquipment? inventoryNumber.value : props.oldData.inventory_number;
-                },
-                set: (value) => { inventoryNumber.value = value } 
-            });
-            const computedSelectedType = computed( {
-                get() { 
-                    return props.isNewEquipment? selectedType.value : { 
-                        equipment_type_id: props.oldData.equipment_type_id, 
-                        equipment_type_name: props.oldData.equipment_type_name 
-                };
-                },
-                set: (value) => { selectedType.value = value } 
-            });
-            const computedSelectedStatus = computed({
-                get() { 
-                    return props.isNewEquipment? selectedStatus.value : { 
-                        equipment_status_id: props.oldData.equipment_status_id, 
-                        equipment_status_name: props.oldData.equipment_status_name 
-                    };
-                },
-                set: (value) => { selectedStatus.value = value } 
-            });
-            const computedSelectedResponsible = computed({
-                get() {
-                    return props.isNewEquipment? selectedResponsible.value : { 
-                        equipment_responsible_id: props.oldData.equipment_responsible_id, 
-                        equipment_responsible_full_name: props.oldData.equipment_responsible_full_name
-                    }
-                },
-                set: (value) => { selectedResponsible.value = value } 
-            });
-
             const closeModal = () => {
                 equipmentName.value = '';
                 inventoryNumber.value = '';
-                selectedType.value = {};
-                selectedStatus.value = {};
-                selectedResponsible.value = {};
+                selectedType.value = null;
+                selectedStatus.value = null;
+                selectedResponsible.value = null;
                 emit('closeModal', false);
             }
             
@@ -136,9 +99,10 @@ import EquipmentService from '@/api/EquipmentService';
                 selectedStatus: selectedStatus.value,
                 selectedResponsible: selectedResponsible.value,
             };
-            console.log(data)
+
             await EquipmentService.addEquipment(data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber); 
             closeModal();
+            window.location.reload();
         }
             const updateEqipment = async () => {
                 const data = {
@@ -148,15 +112,16 @@ import EquipmentService from '@/api/EquipmentService';
                 selectedStatus: selectedStatus.value,
                 selectedResponsible: selectedResponsible.value,
             };
-                console.log(data);
+
                 try {
-                    // EquipmentService.updateEquipment(props.oldData.equipment_id,data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber)
+                    EquipmentService.updateEquipment(props.oldData.equipment_id,data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber)
                 }
                 catch(e) {
                     console.log(e);
                 }
                 finally {
-                    closeModal()
+                    closeModal();
+                    window.location.reload();
                 }
 
             }
@@ -177,14 +142,35 @@ import EquipmentService from '@/api/EquipmentService';
                         responsibleList.value.push(elem)
                     });
                 })
-            })
+                
+                if(props.oldData) {
+                    console.log('oldDATA')
+                    equipmentName.value = props.oldData.equipment_name;
+                    inventoryNumber.value = props.oldData.inventory_number;
+                    selectedResponsible.value = { 
+                        equipment_responsible_id: props.oldData.equipment_responsible_id,
+                        equipment_responsible_full_name: props.oldData.equipment_responsible_full_name,
+                        division_id: props.oldData.division_id,
+                        division_name: props.oldData.division_name,
+                        equipment_responsible_position: props.oldData.equipment_responsible_position,
+                    };
+                    selectedStatus.value = { 
+                        equipment_status_id: props.oldData.equipment_status_id,
+                        equipment_status_name: props.oldData.equipment_status_name,
+                    };
+                    selectedType.value = { 
+                        equipment_type_id: props.oldData.equipment_type_id,
+                        equipment_type_name: props.oldData.equipment_type_name,
+                    };
+                }
+            }) 
         
             return {
-                computedEquipmentName,
-                computedInventoryNumber,
-                computedSelectedType,
-                computedSelectedStatus,
-                computedSelectedResponsible,
+                equipmentName,
+                inventoryNumber,
+                selectedType,
+                selectedStatus,
+                selectedResponsible,
                 inventoryNumber, 
                 baseData, 
                 closeModal, 

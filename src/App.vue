@@ -1,11 +1,21 @@
 <template>
-          <div class="tables-container">
-            <router-link :to="'/'" exact active-class="active-link" class="link">Оборудование</router-link>
-            <router-link :to="'/division'" exact active-class="active-link" class="link">Структурные подразделения</router-link>
-            <router-link :to="'/responsibles'" exact active-class="active-link" class="link">Мат. ответственные</router-link>
-            <router-link :to="'/type'" exact active-class="active-link" class="link">Тип оборудования</router-link>
-            <router-link :to="'/status'" exact active-class="active-link" class="link">Статус оборудования</router-link>
-        </div>
+  <div class="tables-container" >
+    <router-link :to="'/'" 
+    exact active-class="active-link" 
+    class="link">Оборудование</router-link>
+    <router-link :to="'/division'" 
+    exact active-class="active-link" 
+    class="link">Структурные подразделения</router-link>
+    <router-link :to="'/responsibles'" 
+    exact active-class="active-link" 
+    class="link">Мат. ответственные</router-link>
+    <router-link :to="'/type'" 
+    exact active-class="active-link" 
+    class="link">Тип оборудования</router-link>
+    <router-link :to="'/status'" 
+    exact active-class="active-link" 
+    class="link">Статус оборудования</router-link>
+  </div>
   <router-view />
 </template>
 

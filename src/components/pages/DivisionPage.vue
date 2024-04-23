@@ -23,10 +23,10 @@
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DialogPage from './DialogPage.vue';
+import DialogPage from '../DialogModalPage.vue';
 
 export default {
-    name: 'StatusPage',
+    name: 'DivisionPage',
     components: { 
         VueTableLite,
         DialogPage,
@@ -36,14 +36,14 @@ export default {
         // const isNewEquipment = ref(true);
         // const oldData = ref({});
 
-        const statusList = ref([]);
+        const divisionList = ref([]);
       // Инициализация настроек таблицы
         const table = reactive({
             isLoading: false,
             columns: [
             {
                 label: 'ID',
-                field: 'equipment_status_id',
+                field: 'division_id',
                 width: '3%',
                 sortable: false,
                 isKey: true,
@@ -51,7 +51,7 @@ export default {
             },
             {
                 label: 'Название',
-                field: 'equipment_status_name',
+                field: 'division_name',
                 width: '90%',
                 sortable: false,
                 headerStyles: {background: '#1c274c'}
@@ -82,10 +82,10 @@ export default {
         // doSearch(0,10,'equipment_id', 'asc');
 
         onMounted(() => {
-            EquipmentService.getEquipmentStatusList()
+            EquipmentService.getDivisionList()
             .then(res => { 
                 res.forEach(elem => {
-                    statusList.value.push(elem)
+                    divisionList.value.push(elem)
                 });
                 table.rows = res;
                 // table.sortable.order = order;
@@ -143,7 +143,7 @@ export default {
         height: 40px;
         border: none;
         background: none;
-        background-image: url('../assets/add-circle-svgrepo-com.svg');
+        background-image: url('../../assets/add-circle-svgrepo-com.svg');
         background-size: cover;
         margin-left: auto;
         margin-top: 10px;
