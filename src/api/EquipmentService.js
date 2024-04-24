@@ -42,26 +42,26 @@ class EquipmentService {
         .catch(e => reject(e))
     })
 
-    static addEquipmentStatusList = () => new Promise((resolve, reject) => {
-        instance.post('/status')
+    static addEquipmentStatus = (equipment_status_name) => new Promise((resolve, reject) => {
+        instance.post('/status', { equipment_status_name })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
-    static addEquipmentTypeList = () => new Promise((resolve, reject) => {
-        instance.post('/types')
+    static addEquipmentType = (equipment_type_name) => new Promise((resolve, reject) => {
+        instance.post('/types', { equipment_type_name })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
-    static addEquipmentResponsibleList = () => new Promise((resolve, reject) => {
-        instance.post('/responsible')
+    static addEquipmentResponsible = (division_id, equipment_responsible_f_name, equipment_responsible_s_name, equipment_responsible_l_name, equipment_responsible_position) => new Promise((resolve, reject) => {
+        instance.post('/responsible', { division_id, equipment_responsible_f_name, equipment_responsible_s_name, equipment_responsible_l_name, equipment_responsible_position })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
-    static addDivisionList = () => new Promise((resolve, reject) => {
-        instance.post('/division')
+    static addDivision = (division_name) => new Promise((resolve, reject) => {
+        instance.post('/division', { division_name })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
@@ -73,26 +73,26 @@ class EquipmentService {
         .catch(e => reject(e))
     })
 
-    static updateEquipmentStatusList = () => new Promise((resolve, reject) => {
-        instance.put('/status')
+    static updateEquipmentStatus = (equipment_status_id, equipment_status_name) => new Promise((resolve, reject) => {
+        instance.put('/status', { equipment_status_id, equipment_status_name })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
-    static updateEquipmentTypeList = () => new Promise((resolve, reject) => {
-        instance.put('/types')
+    static updateEquipmentType = (equipment_type_id, equipment_type_name) => new Promise((resolve, reject) => {
+        instance.put('/types', { equipment_type_id, equipment_type_name })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
-    static updateEquipmentResponsibleList = () => new Promise((resolve, reject) => {
-        instance.put('/responsible')
+    static updateEquipmentResponsible = (equipment_responsible_id, division_id, equipment_responsible_f_name, equipment_responsible_s_name, equipment_responsible_l_name, equipment_responsible_position) => new Promise((resolve, reject) => {
+        instance.put('/responsible', { equipment_responsible_id, division_id, equipment_responsible_f_name, equipment_responsible_s_name, equipment_responsible_l_name, equipment_responsible_position })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
 
-    static updateDivisionList = () => new Promise((resolve, reject) => {
-        instance.put('/division')
+    static updateDivision = (division_id, division_name) => new Promise((resolve, reject) => {
+        instance.put('/division', { division_id, division_name })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })

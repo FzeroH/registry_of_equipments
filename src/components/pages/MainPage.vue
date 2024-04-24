@@ -16,20 +16,20 @@
             class="table">
         </VueTableLite>
     </div>
-    <DialogModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewEquipment="isNewEquipment" :oldData="oldData" />
+    <MainModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewEquipment="isNewEquipment" :oldData="oldData" />
 </template>
 
 <script>
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DialogModalPage from '../DialogModalPage.vue';
+import MainModalPage from '../modal_pages/MainModalPage.vue';
 
 export default {
     name: 'MainPage',
     components: { 
         VueTableLite,
-        DialogModalPage,
+        MainModalPage,
     },
     setup() {
         const isVisible = ref(false);

@@ -1,6 +1,6 @@
 <template>
     <div class="main-container">
-        <button type="submit" class="add_row" title="Добавить оборудование" @click="showModal">
+        <button type="submit" class="add_row" title="Добавить мат. ответственного" @click="showModal">
         </button>
         <VueTableLite
             :is-loading="table.isLoading"
@@ -16,27 +16,27 @@
             class="table">
         </VueTableLite>
     </div>
-    <DialogPage :showModal="isVisible" @closeModal="closeModal" :isNewEquipment="isNewEquipment" :oldData="oldData" />
+    <ResponsibleModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewResponsible="isNewResponsible" :oldData="oldData" />
 </template>
 
 <script>
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DialogPage from '../DialogModalPage.vue';
+import ResponsibleModalPage from '../modal_pages/ResponsibleModalPage.vue';
 
 export default {
     name: 'ResponsiblesPage',
     components: { 
         VueTableLite,
-        DialogPage,
+        ResponsibleModalPage,
     },
     setup() {
         const isVisible = ref(false);
-        // const isNewEquipment = ref(true);
-        // const oldData = ref({});
+        const isNewResponsible = ref(true);
+        const oldData = ref(null);
 
-        const typeList = ref([]);
+        const responsibleList = ref([]);
       // Инициализация настроек таблицы
         const table = reactive({
             isLoading: false,
@@ -78,55 +78,45 @@ export default {
             sort: 'asc',
             },
         });
-        // Функция сортировки данных в таблице. Для сортировки используются переменные order и sort.
-        // limit и offset были добавлены, так как этого требует функция.
-        // const doSearch = (limit, offset, order, sort) => {
-        //     table.isLoading = true;
-        //     EquipmentService.getDivisionListList()
-        //     .then(res => { 
-        //         res.forEach(elem => {
-        //             divisionList.value.push(elem)
-        //         });
-        //         table.rows = res;
-        //         table.sortable.order = order;
-        //         table.sortable.sort = sort;
-        //         table.isLoading = false;
-        //      })
-        // }
-        // doSearch(0,10,'equipment_id', 'asc');
-
         onMounted(() => {
+            table.isLoading = true;
             EquipmentService.getEquipmentResponsibleList()
             .then(res => { 
                 res.forEach(elem => {
-                    typeList.value.push(elem)
+                    responsibleList.value.push(elem)
                 });
                 table.rows = res;
-                // table.sortable.order = order;
-                // table.sortable.sort = sort;
                 table.isLoading = false;
              })
         })
 
         const rowClicked = (row) => {
-            // oldData.value = row;
-            // isNewEquipment.value = false;
-            // isVisible.value = true;
+            oldData.value = row;
+            isNewResponsible.value = false;
+            isVisible.value = true;
             console.log(row);
         };
 
         const showModal = () => {
-            // isNewEquipment.value = true;
+            isNewResponsible.value = true;
             isVisible.value = true;
         };
 
 
         const closeModal = () => {
             isVisible.value = false;
-            // oldData.value = {};
+            oldData.value = null;
         };
 
-        return { table, rowClicked, isVisible, showModal, closeModal, }
+        return { 
+            table, 
+            rowClicked, 
+            isVisible, 
+            showModal, 
+            closeModal,
+            isNewResponsible,
+            oldData
+         }
     },
 }
 </script>

@@ -16,25 +16,25 @@
             class="table">
         </VueTableLite>
     </div>
-    <DialogPage :showModal="isVisible" @closeModal="closeModal" :isNewEquipment="isNewEquipment" :oldData="oldData" />
+    <DSTModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewName="isNewName" :oldData="oldData" />
 </template>
 
 <script>
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DialogPage from '../DialogModalPage.vue';
+import DSTModalPage from '../modal_pages/DSTModalPage.vue';
 
 export default {
     name: 'TypesPage',
     components: { 
         VueTableLite,
-        DialogPage,
+        DSTModalPage,
     },
     setup() {
         const isVisible = ref(false);
-        // const isNewEquipment = ref(true);
-        // const oldData = ref({});
+        const isNewName = ref(true);
+        const oldData = ref('');
 
         const typeList = ref([]);
       // Инициализация настроек таблицы
@@ -64,22 +64,7 @@ export default {
             sort: 'asc',
             },
         });
-        // Функция сортировки данных в таблице. Для сортировки используются переменные order и sort.
-        // limit и offset были добавлены, так как этого требует функция.
-        // const doSearch = (limit, offset, order, sort) => {
-        //     table.isLoading = true;
-        //     EquipmentService.getDivisionListList()
-        //     .then(res => { 
-        //         res.forEach(elem => {
-        //             divisionList.value.push(elem)
-        //         });
-        //         table.rows = res;
-        //         table.sortable.order = order;
-        //         table.sortable.sort = sort;
-        //         table.isLoading = false;
-        //      })
-        // }
-        // doSearch(0,10,'equipment_id', 'asc');
+    
 
         onMounted(() => {
             EquipmentService.getEquipmentTypeList()
@@ -88,31 +73,29 @@ export default {
                     typeList.value.push(elem)
                 });
                 table.rows = res;
-                // table.sortable.order = order;
-                // table.sortable.sort = sort;
                 table.isLoading = false;
              })
         })
 
         const rowClicked = (row) => {
-            // oldData.value = row;
-            // isNewEquipment.value = false;
-            // isVisible.value = true;
+            oldData.value = row;
+            isNewName.value = false;
+            isVisible.value = true;
             console.log(row);
         };
 
         const showModal = () => {
-            // isNewEquipment.value = true;
+            isNewName.value = true;
             isVisible.value = true;
         };
 
 
         const closeModal = () => {
             isVisible.value = false;
-            // oldData.value = {};
+            oldData.value = '';
         };
 
-        return { table, rowClicked, isVisible, showModal, closeModal, }
+        return { table, rowClicked, isVisible, showModal, closeModal, isNewName, oldData }
     },
 }
 </script>

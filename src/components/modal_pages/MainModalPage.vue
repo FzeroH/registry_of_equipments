@@ -47,7 +47,7 @@ import { ref, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
 
     export default {
-        name: "DialogPage",
+        name: "MainModalPage",
         props: {
             showModal: {
                 type: Boolean,
@@ -144,7 +144,7 @@ import EquipmentService from '@/api/EquipmentService';
                 })
                 
                 if(props.oldData) {
-                    console.log('oldDATA')
+                    console.log(JSON.stringify(props.oldData))
                     equipmentName.value = props.oldData.equipment_name;
                     inventoryNumber.value = props.oldData.inventory_number;
                     selectedResponsible.value = { 
