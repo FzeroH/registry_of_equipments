@@ -1,6 +1,19 @@
 import instance from './config/axios.config';
 
 class EquipmentService {
+
+    /*Регистрация и авторизация */
+    static registration = (login, password) => new Promise((resolve, reject) => {
+        instance.post('/registration', { login, password })
+        .then(res => resolve(res.data))
+        .catch(e => reject(e))
+    })
+    static login = (login, password) => new Promise((resolve, reject) => {
+        instance.post('/login', { login, password })
+        .then(res => resolve(res.data))
+        .catch(e => reject(e))
+    })
+
     /* Получить данные */
     static getEquipmentList = (order, sort) => new Promise((resolve, reject) => {
         instance.get('/equipments', { params: {
@@ -36,8 +49,8 @@ class EquipmentService {
     })
 
     /* Добавить данные */
-    static addEquipment = (equipment_type_id, equipment_status_id, equipment_responsible_id, equipment_name, inventory_number) => new Promise((resolve, reject) => {
-        instance.post('/equipments', { equipment_type_id, equipment_status_id, equipment_responsible_id, equipment_name, inventory_number })
+    static addEquipment = (equipment_type_id, equipment_status_id, equipment_responsible_id, equipment_name, inventory_number, user_id) => new Promise((resolve, reject) => {
+        instance.post('/equipments', { equipment_type_id, equipment_status_id, equipment_responsible_id, equipment_name, inventory_number, user_id })
         .then(res => resolve(res.data))
         .catch(e => reject(e))
     })
