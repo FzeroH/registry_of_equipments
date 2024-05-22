@@ -1,6 +1,6 @@
 <template>
-  <div class="tables-container" >
-    <router-link :to="'/'" 
+  <div class="tables-container" v-if="$route.path !== '/'">
+    <router-link :to="'/main'" 
     exact active-class="active-link" 
     class="link">Оборудование</router-link>
     <router-link :to="'/division'" 
