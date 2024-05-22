@@ -4,11 +4,17 @@ import DivisionPage from '@/components/pages/DivisionPage.vue';
 import StatusPage from '@/components/pages/StatusPage.vue';
 import TypesPage from '@/components/pages/TypesPage.vue';
 import ResponsiblesPage from '@/components/pages/ResponsiblesPage.vue';
+import LoginPage from '@/components/pages/LoginPage.vue';
 
 
 const routes = [
     {
         path:'/',
+        name: 'login',
+        component: LoginPage,
+    },
+    {
+        path:'/main',
         name: 'main',
         component: MainPage,
     },
@@ -41,6 +47,20 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
+  });
+
+  router.beforeEach((to, from, next) => {
+    const userId = localStorage.getItem('user_id');
+
+    if (!userId && to.path !== '/') {
+        next('/');
+    } 
+    else if (userId && to.path === '/') {
+        next('/main')
+    }
+    else {
+        next();
+    }
   })
   
   export default router
