@@ -104,6 +104,27 @@ export default {
                 sortable: true,
                 headerStyles: {background: '#1c274c'}
             },
+            {
+                label: 'Добавил',
+                field: 'login',
+                width: '15%',
+                sortable: true,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Дата добавления',
+                field: 'date_start',
+                width: '15%',
+                sortable: true,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Дата последнего обновления',
+                field: 'date_update',
+                width: '15%',
+                sortable: true,
+                headerStyles: {background: '#1c274c'}
+            },
             ],
             rows: [],
             totalRecordCount: 0,

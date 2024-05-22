@@ -100,7 +100,7 @@ import EquipmentService from '@/api/EquipmentService';
                 selectedResponsible: selectedResponsible.value,
             };
 
-            await EquipmentService.addEquipment(data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber); 
+            await EquipmentService.addEquipment(data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber, localStorage.getItem('user_id')); 
             closeModal();
             window.location.reload();
         }
