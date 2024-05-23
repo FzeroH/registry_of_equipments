@@ -29,26 +29,36 @@ export default {
         const login = () => {
             succsess.value = '';
             error.value = '';
-            EquipmentService.login(username.value, password.value)
-            .then(res => {
-                localStorage.setItem('user_id',res.user_id)
-                router.push('/main')
-            })
-            .catch(e => {
-                error.value = e.response.data.error
-            })
+            if (username.value && password.value) {
+                EquipmentService.login(username.value, password.value)
+                .then(res => {
+                    localStorage.setItem('user_id',res.user_id)
+                    router.push('/main')
+                })
+                .catch(e => {
+                    error.value = e.response.data.error
+                })
+            } 
+            else {
+                return
+            }
         }
 
         const registration = () => {
             succsess.value = '';
             error.value = '';
-            EquipmentService.registration(username.value, password.value)
-            .then(res => {
-                succsess.value = res.message
-            })
-            .catch(e => {
-                error.value = e.response.data.error
-            })
+            if (username.value && password.value) {
+                EquipmentService.registration(username.value, password.value)
+                .then(res => {
+                    succsess.value = res.message
+                })
+                .catch(e => {
+                    error.value = e.response.data.error
+                })
+            }
+            else {
+                return
+            }
         }
 
         return { username, password, error, succsess, login, registration }

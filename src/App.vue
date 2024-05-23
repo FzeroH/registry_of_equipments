@@ -1,27 +1,13 @@
 <template>
-  <div class="tables-container" v-if="$route.path !== '/'">
-    <router-link :to="'/main'" 
-    exact active-class="active-link" 
-    class="link">Оборудование</router-link>
-    <router-link :to="'/division'" 
-    exact active-class="active-link" 
-    class="link">Структурные подразделения</router-link>
-    <router-link :to="'/responsibles'" 
-    exact active-class="active-link" 
-    class="link">Мат. ответственные</router-link>
-    <router-link :to="'/type'" 
-    exact active-class="active-link" 
-    class="link">Тип оборудования</router-link>
-    <router-link :to="'/status'" 
-    exact active-class="active-link" 
-    class="link">Статус оборудования</router-link>
-  </div>
+  <EquipmentHeader v-if="$route.path !== '/'" />
   <router-view />
 </template>
 
 <script>
+import EquipmentHeader from './components/EquipmentHeader.vue';
 export default {
   name: 'App',
+  components: { EquipmentHeader },
 }
 </script>
 
@@ -34,29 +20,4 @@ export default {
   blockquote,q{quotes:none}
   blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
   table{border-collapse:collapse;border-spacing:0}
-
-  
-  .tables-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-  .link {
-        margin-left:15px;
-        color: #1c274c;
-        text-decoration: none;
-        transition: 100ms ease;
-    }
-
-    .link:hover {
-        font-weight: bold;
-        transition: 100ms ease;
-    }
-    
-    .active-link {
-        font-weight: bold;
-        text-decoration: underline;
-    }
 </style>
