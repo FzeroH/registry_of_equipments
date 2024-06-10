@@ -160,6 +160,7 @@ import { useRoute } from 'vue-router';
         display: flex; 
         justify-content: center; 
         align-items: center; 
+        z-index: 2;
         } 
 
     .modal-content { 

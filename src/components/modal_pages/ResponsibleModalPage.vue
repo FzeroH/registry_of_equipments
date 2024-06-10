@@ -181,6 +181,7 @@ import EquipmentService from '@/api/EquipmentService';
         display: flex; 
         justify-content: center; 
         align-items: center; 
+        z-index: 2;
         } 
 
     .modal-content { 

@@ -1,7 +1,5 @@
 <template>
     <div class="main-container">
-        <button type="submit" class="add_row" title="Добавить мат. ответственного" @click="showModal">
-        </button>
         <VueTableLite
             :is-loading="table.isLoading"
             :columns="table.columns"
@@ -11,12 +9,9 @@
             :is-hide-paging="true"
             :hide-default-footer="true"
             :sortable="table.sortable"
-            @do-search="doSearch"
-            @row-clicked="rowClicked"
             class="table">
         </VueTableLite>
     </div>
-    <ResponsibleModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewResponsible="isNewResponsible" :oldData="oldData" />
 </template>
 
 <script>
@@ -32,10 +27,6 @@ export default {
         ResponsibleModalPage,
     },
     setup() {
-        const isVisible = ref(false);
-        const isNewResponsible = ref(true);
-        const oldData = ref(null);
-
         const responsibleList = ref([]);
       // Инициализация настроек таблицы
         const table = reactive({
@@ -83,32 +74,8 @@ export default {
              })
         })
 
-        const rowClicked = (row) => {
-            oldData.value = row;
-            isNewResponsible.value = false;
-            isVisible.value = true;
-            console.log(row);
-        };
-
-        const showModal = () => {
-            isNewResponsible.value = true;
-            isVisible.value = true;
-        };
-
-
-        const closeModal = () => {
-            isVisible.value = false;
-            oldData.value = null;
-        };
-
         return { 
             table, 
-            rowClicked, 
-            isVisible, 
-            showModal, 
-            closeModal,
-            isNewResponsible,
-            oldData
          }
     },
 }
@@ -150,8 +117,6 @@ export default {
     .add_row:hover {
         cursor: pointer;
     }
-
-
     
     .bg_dark-blue {
         background: #1c274c !important;

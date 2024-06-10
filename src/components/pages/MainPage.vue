@@ -1,5 +1,11 @@
 <template>
   <div class="main-container">
+
+    <div class="search">
+      <input v-model="search" type="text" class="search__input" @keydown.enter="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
+      <input type="button" value="Поиск" class="search__btn" @click="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
+    </div>
+
     <button
       v-if="isAdmin || isEmployee"
       type="submit"
@@ -7,11 +13,6 @@
       title="Добавить оборудование"
       @click="showModal"
     ></button>
-
-    <div class="search">
-      <input v-model="search" type="text" class="search__input" />
-      <input type="button" value="Поиск" class="search__btn" @click="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
-    </div>
 
     <VueTableLite
       :is-loading="table.isLoading"
@@ -23,7 +24,7 @@
       :hide-default-footer="true"
       :sortable="table.sortable"
       @do-search="doSearch"
-      @row-clicked="(isAdmin || isEmployee) && rowClicked"
+      @row-clicked="rowClicked"
       class="table"
     >
     </VueTableLite>
@@ -57,6 +58,8 @@ export default {
     MainModalPage,
   },
   setup(props) {
+    const isAdmin = checkIsAdmin();
+    const isEmployee = checkIsEmployee();
     const isVisible = ref(false);
     const isNewEquipment = ref(true);
     const oldData = ref(null);
@@ -185,12 +188,12 @@ export default {
     };
     doSearch(0, 10, "equipment_id", "asc");
 
-    const rowClicked = (row) => {
+    const rowClicked = (isAdmin || isEmployee) && ((row) => {
       oldData.value = row;
       isNewEquipment.value = false;
       isVisible.value = true;
       console.log(row);
-    };
+    });
 
     const showModal = () => {
       isNewEquipment.value = true;
@@ -201,9 +204,6 @@ export default {
       isVisible.value = false;
       oldData.value = {};
     };
-
-    const isAdmin = checkIsAdmin();
-    const isEmployee = checkIsEmployee();
 
     return {
       search,
