@@ -6,7 +6,7 @@
             <h2 v-else>Изменить данные мат. ответственного</h2>
             
             <label for="first_name">
-                <input id="first_name" 
+                <input id="first_name"
                 type="text" 
                 placeholder="Введите имя ответственного" 
                 v-model="equipmentFirtsName"
@@ -47,7 +47,7 @@ import { ref, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
 
     export default {
-        name: "ResponsibleModalPage",
+        name: "UserModalPage",
         props: {
             showModal: {
                 type: Boolean,
@@ -114,8 +114,7 @@ import EquipmentService from '@/api/EquipmentService';
             };
 
                 try {
-                    console.log(data)
-                    EquipmentService.updateEquipmentResponsible(props.oldData.user_id,data.selectedDivision.division_id,data.equipmentFirtsName, data.equipmentSecondName, data.equipmentLastName, data.equipmentResponsiblePosition)
+                    await EquipmentService.updateUser(props.oldData.user_id, props.oldData.role_id,data.selectedDivision.division_id, props.oldData.login, data.equipmentFirtsName, data.equipmentLastName, data.equipmentSecondName)
                 }
                 catch(e) {
                     console.log(e);
@@ -124,27 +123,19 @@ import EquipmentService from '@/api/EquipmentService';
                     closeModal();
                     window.location.reload();
                 }
-
             }
 
-            onMounted(()=> {
-                EquipmentService.getDivisionList().then(res => {
+            onMounted(async ()=> {
+                await EquipmentService.getDivisionList().then(res => {
                     res.forEach(elem => {
                         divisionList.value.push(elem)
                     });
                 })
 
                 if(props.oldData) {
-                    const arraySplitName = props.oldData.equipment_responsible_full_name.split(' ');
-                    const splitName = { 
-                        first_name: arraySplitName[1],
-                        last_name: arraySplitName[0],
-                        middle_name: arraySplitName[2]
-                    }
-                    equipmentFirtsName.value = splitName.first_name;
-                    equipmentLastName.value = splitName.last_name;
-                    equipmentSecondName.value = splitName.middle_name;
-                    equipmentResponsiblePosition.value = props.oldData.equipment_responsible_position;
+                    equipmentFirtsName.value = props.oldData.first_name;
+                    equipmentLastName.value = props.oldData.last_name;
+                    equipmentSecondName.value = props.oldData.middle_name;
                     
                     selectedDivision.value = { 
                         division_id: props.oldData.division_id,
@@ -157,7 +148,6 @@ import EquipmentService from '@/api/EquipmentService';
                 equipmentFirtsName,
                 equipmentLastName,
                 equipmentSecondName,
-                equipmentResponsiblePosition,
                 selectedDivision,
                 baseData, 
                 closeModal, 

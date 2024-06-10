@@ -18,7 +18,7 @@
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import ResponsibleModalPage from '../modal_pages/ResponsibleModalPage.vue';
+import ResponsibleModalPage from '../modal_pages/UserModalPage.vue';
 
 export default {
     name: 'ResponsiblesPage',

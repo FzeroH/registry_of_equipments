@@ -169,24 +169,31 @@ class EquipmentService {
         .catch((e) => reject(e));
     });
 
-  static updateEquipmentResponsible = (
+  static updateUser = (
     user_id,
     role_id,
     division_id,
     login,
-    password,
     first_name,
     last_name,
     middle_name
   ) =>
     new Promise((resolve, reject) => {
+        console.log('afa', {
+            user_id,
+            role_id,
+            division_id,
+            login,
+            first_name,
+            last_name,
+            middle_name,
+          });
       instance()
-        .put("/responsible", {
+        .put("/user", {
           user_id,
           role_id,
           division_id,
           login,
-          password,
           first_name,
           last_name,
           middle_name,

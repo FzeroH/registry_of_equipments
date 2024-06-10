@@ -15,6 +15,7 @@
             @row-clicked="rowClicked"
             class="table">
         </VueTableLite>
+        <UserModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewName="isNewName" :oldData="oldData" />
     </div>
 </template>
 
@@ -22,11 +23,13 @@
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
+import UserModalPage from '../modal_pages/UserModalPage.vue';
 
 export default {
-    name: 'TypesPage',
+    name: 'UsersPage',
     components: { 
         VueTableLite,
+        UserModalPage,
     },
     setup() {
         const isVisible = ref(false);
@@ -77,6 +80,13 @@ export default {
             {
                 label: 'Отчество',
                 field: 'middle_name',
+                width: '90%',
+                sortable: false,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Подразделение',
+                field: 'division_name',
                 width: '90%',
                 sortable: false,
                 headerStyles: {background: '#1c274c'}
