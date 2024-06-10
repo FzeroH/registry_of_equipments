@@ -43,7 +43,7 @@ export default {
             columns: [
             {
                 label: 'ID',
-                field: 'equipment_responsible_id',
+                field: 'user_id',
                 width: '3%',
                 sortable: false,
                 isKey: true,
@@ -52,13 +52,6 @@ export default {
             {
                 label: 'Мат. ответственный',
                 field: 'equipment_responsible_full_name',
-                width: '90%',
-                sortable: false,
-                headerStyles: {background: '#1c274c'}
-            },
-            {
-                label: 'Номер аудитории',
-                field: 'equipment_responsible_position',
                 width: '90%',
                 sortable: false,
                 headerStyles: {background: '#1c274c'}

@@ -48,14 +48,6 @@ export default {
             },
             columns: [
             {
-                label: 'ID',
-                field: 'equipment_id',
-                width: '3%',
-                sortable: true,
-                isKey: true,
-                headerStyles: {background: '#1c274c'}
-            },
-            {
                 label: 'Название',
                 field: 'equipment_name',
                 width: '10%',
@@ -71,7 +63,7 @@ export default {
             },
             {
                 label: 'Мат. ответственный',
-                field: 'equipment_responsible_full_name',
+                field: 'responsible_fullname',
                 width: '15%',
                 sortable: true,
                 headerStyles: {background: '#1c274c'}
@@ -84,15 +76,15 @@ export default {
                 headerStyles: {background: '#1c274c'}
             },
             {
-                label: 'Номер аудитории',
-                field: 'equipment_responsible_position',
+                label: 'Балансовая стоимость',
+                field: 'balance_cost',
                 width: '15%',
                 sortable: true,
                 headerStyles: {background: '#1c274c'}
             },
             {
-                label: 'Тип оборудования',
-                field: 'equipment_type_name',
+                label: 'Количество',
+                field: 'quantity',
                 width: '15%',
                 sortable: true,
                 headerStyles: {background: '#1c274c'}
@@ -107,6 +99,20 @@ export default {
             {
                 label: 'Добавил',
                 field: 'login',
+                width: '15%',
+                sortable: true,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Дата постановки на учет',
+                field: 'date_registration',
+                width: '15%',
+                sortable: true,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Дата снятия с учета',
+                field: 'date_de_registration',
                 width: '15%',
                 sortable: true,
                 headerStyles: {background: '#1c274c'}

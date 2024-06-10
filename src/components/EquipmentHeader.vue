@@ -9,9 +9,9 @@
       <router-link :to="'/responsibles'" 
       exact active-class="active-link" 
       class="link">Мат. ответственные</router-link>
-      <router-link :to="'/type'" 
+      <router-link :to="'/users'" 
       exact active-class="active-link" 
-      class="link">Тип оборудования</router-link>
+      class="link">Пользователи</router-link>
       <router-link :to="'/status'" 
       exact active-class="active-link" 
       class="link">Статус оборудования</router-link>
@@ -36,45 +36,47 @@
   
   <style scoped>
    
-    .tables-container {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          margin-top: 20px;
-      }
+  .tables-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-content: center;
+      margin-top: 20px;
+    }
   
-    .link {
-          margin-left:15px;
-          color: #1c274c;
-          text-decoration: none;
-          transition: 100ms ease;
-      }
+  .link {
+      margin-left:15px;
+      margin-bottom: ;
+      color: #1c274c;
+      text-decoration: none;
+      transition: 100ms ease;
+    }
   
-      .link:hover {
-          font-weight: bold;
-          transition: 100ms ease;
-      }
+    .link:hover {
+      font-weight: bold;
+      transition: 100ms ease;
+    }
       
-      .active-link {
-          font-weight: bold;
-          text-decoration: underline;
-      }
+    .active-link {
+      font-weight: bold;
+      text-decoration: underline;
+    }
   
-      .logout {
-        align-self: flex-end;
-          color: #1c274c;
-          outline: none;
-          border: none;
-          margin-left: 20px;
-          background: none;
-          transition: 200ms ease;
+    .logout {
+      align-self: flex-end;
+      color: #1c274c;
+      outline: none;
+      border: none;
+      margin-left: 20px;
+      background: none;
+      transition: 200ms ease;
   
-      }
+    }
   
-      .logout:hover {
-        cursor: pointer;
-        font-weight: bold;
-        transition: 200ms ease;
-      }
+    .logout:hover {
+      cursor: pointer;
+      font-weight: bold;
+      transition: 200ms ease;
+    }
   </style>
   

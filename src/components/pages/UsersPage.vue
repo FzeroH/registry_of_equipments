@@ -16,20 +16,17 @@
             class="table">
         </VueTableLite>
     </div>
-    <DSTModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewName="isNewName" :oldData="oldData" />
 </template>
 
 <script>
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DSTModalPage from '../modal_pages/DSTModalPage.vue';
 
 export default {
     name: 'TypesPage',
     components: { 
         VueTableLite,
-        DSTModalPage,
     },
     setup() {
         const isVisible = ref(false);
@@ -43,15 +40,43 @@ export default {
             columns: [
             {
                 label: 'ID',
-                field: 'equipment_type_id',
+                field: 'user_id',
                 width: '3%',
                 sortable: false,
                 isKey: true,
                 headerStyles: {background: '#1c274c'}
             },
             {
-                label: 'Название',
-                field: 'equipment_type_name',
+                label: 'Роль пользователя',
+                field: 'role_name',
+                width: '90%',
+                sortable: false,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Логин пользователя',
+                field: 'login',
+                width: '90%',
+                sortable: false,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Фамилия',
+                field: 'last_name',
+                width: '90%',
+                sortable: false,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Имя',
+                field: 'first_name',
+                width: '90%',
+                sortable: false,
+                headerStyles: {background: '#1c274c'}
+            },
+            {
+                label: 'Отчество',
+                field: 'middle_name',
                 width: '90%',
                 sortable: false,
                 headerStyles: {background: '#1c274c'}
@@ -67,7 +92,7 @@ export default {
     
 
         onMounted(() => {
-            EquipmentService.getEquipmentTypeList()
+            EquipmentService.getUserList()
             .then(res => { 
                 res.forEach(elem => {
                     typeList.value.push(elem)

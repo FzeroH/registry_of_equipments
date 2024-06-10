@@ -2,9 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '@/components/pages/MainPage.vue';
 import DivisionPage from '@/components/pages/DivisionPage.vue';
 import StatusPage from '@/components/pages/StatusPage.vue';
-import TypesPage from '@/components/pages/TypesPage.vue';
 import ResponsiblesPage from '@/components/pages/ResponsiblesPage.vue';
 import LoginPage from '@/components/pages/LoginPage.vue';
+import UsersPage from '@/components/pages/UsersPage.vue';
 
 
 const routes = [
@@ -29,9 +29,9 @@ const routes = [
         component: ResponsiblesPage,
     },
     {
-        path:'/type',
+        path:'/users',
         name: 'type',
-        component: TypesPage,
+        component: UsersPage,
     },
     {
         path:'/status',

@@ -5,10 +5,6 @@
                 <h2 v-if="isNewName">Добавить структурное подразделение</h2>
                 <h2 v-else>Изменить структурное подразделение</h2>
             </template>
-            <template v-if="$route.path === '/type'">
-                <h2 v-if="isNewName">Добавить тип оборудования</h2>
-                <h2 v-else>Изменить тип оборудования</h2>
-            </template>
             <template v-if="$route.path === '/status'">
                 <h2 v-if="isNewName">Добавить статус оборудования</h2>
                 <h2 v-else>Изменить статус оборудования</h2>
@@ -20,13 +16,6 @@
                 type="text" 
                 placeholder="Введите название структурного подразделения" 
                 v-model="divisionName"
-                 class="equipment-field">
-            </label>
-            <label for="name2" v-if="$route.path === '/type'">
-                <input id="name2" 
-                type="text" 
-                placeholder="Введите тип оборудования" 
-                v-model="equipmentTypeName"
                  class="equipment-field">
             </label>
             <label for="name3" v-if="$route.path === '/status'">

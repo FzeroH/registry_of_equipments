@@ -1,35 +1,29 @@
+
 <template>
     <div class="modal" v-if="showModal">
         <div class="modal-content">
             <h2 v-if="isNewResponsible">Добавить мат. ответственного</h2>
             <h2 v-else>Изменить данные мат. ответственного</h2>
             
-            <label for="equipment_responsible_f_name">
-                <input id="equipment_responsible_f_name" 
+            <label for="first_name">
+                <input id="first_name" 
                 type="text" 
                 placeholder="Введите имя ответственного" 
                 v-model="equipmentFirtsName"
                  class="equipment-field">
             </label>
-            <label for="equipment_responsible_l_name">
-                <input id="equipment_responsible_l_name" 
+            <label for="last_name">
+                <input id="last_name" 
                 type="text" 
                 placeholder="Введите фамилию ответственного" 
                 v-model="equipmentLastName"
                  class="equipment-field">
             </label>
-            <label for="equipment_responsible_l_name">
-                <input id="equipment_responsible_l_name" 
+            <label for="middle_name">
+                <input id="middle_name" 
                 type="text" 
                 placeholder="Введите отчество ответственного" 
                 v-model="equipmentSecondName"
-                 class="equipment-field">
-            </label>
-            <label for="equipment_responsible_position">
-                <input id="equipment_responsible_position" 
-                type="text" 
-                placeholder="Введите номер аудитории, за которой он закреплен" 
-                v-model="equipmentResponsiblePosition"
                  class="equipment-field">
             </label>
 
@@ -78,7 +72,6 @@ import EquipmentService from '@/api/EquipmentService';
             const equipmentFirtsName = ref('');
             const equipmentLastName = ref('');
             const equipmentSecondName = ref('');
-            const equipmentResponsiblePosition = ref('');
             const selectedDivision = ref(null);
 
             /* Массивы данных, полученных из базы */
@@ -88,7 +81,6 @@ import EquipmentService from '@/api/EquipmentService';
                 equipmentFirtsName.value = '';
                 equipmentLastName.value = '';
                 equipmentSecondName.value = '';
-                equipmentResponsiblePosition.value = '';
                 selectedDivision.value = null;
                 emit('closeModal', false);
             }
@@ -98,12 +90,12 @@ import EquipmentService from '@/api/EquipmentService';
                     equipmentFirtsName: equipmentFirtsName.value,
                     equipmentLastName: equipmentLastName.value,
                     equipmentSecondName: equipmentSecondName.value,
-                    equipmentResponsiblePosition: equipmentResponsiblePosition.value,
                     selectedDivision: selectedDivision.value,
             };
             try {
                 // console.log(data)
-                await EquipmentService.addEquipmentResponsible(data.selectedDivision.division_id,data.equipmentFirtsName, data.equipmentSecondName, data.equipmentLastName, data.equipmentResponsiblePosition);
+                await EquipmentService.addEquipmentResponsible(
+                data.selectedDivision.division_id,data.equipmentFirtsName, data.equipmentSecondName, data.equipmentLastName,);
             }
             catch(e) {
                     console.log(e);
@@ -118,13 +110,12 @@ import EquipmentService from '@/api/EquipmentService';
                     equipmentFirtsName: equipmentFirtsName.value,
                     equipmentLastName: equipmentLastName.value,
                     equipmentSecondName: equipmentSecondName.value,
-                    equipmentResponsiblePosition: equipmentResponsiblePosition.value,
                     selectedDivision: selectedDivision.value,
             };
 
                 try {
                     console.log(data)
-                    EquipmentService.updateEquipmentResponsible(props.oldData.equipment_responsible_id,data.selectedDivision.division_id,data.equipmentFirtsName, data.equipmentSecondName, data.equipmentLastName, data.equipmentResponsiblePosition)
+                    EquipmentService.updateEquipmentResponsible(props.oldData.user_id,data.selectedDivision.division_id,data.equipmentFirtsName, data.equipmentSecondName, data.equipmentLastName, data.equipmentResponsiblePosition)
                 }
                 catch(e) {
                     console.log(e);
@@ -146,13 +137,13 @@ import EquipmentService from '@/api/EquipmentService';
                 if(props.oldData) {
                     const arraySplitName = props.oldData.equipment_responsible_full_name.split(' ');
                     const splitName = { 
-                        equipment_responsible_f_name: arraySplitName[1],
-                        equipment_responsible_l_name: arraySplitName[0],
-                        equipment_responsible_s_name: arraySplitName[2]
+                        first_name: arraySplitName[1],
+                        last_name: arraySplitName[0],
+                        middle_name: arraySplitName[2]
                     }
-                    equipmentFirtsName.value = splitName.equipment_responsible_f_name;
-                    equipmentLastName.value = splitName.equipment_responsible_l_name;
-                    equipmentSecondName.value = splitName.equipment_responsible_s_name;
+                    equipmentFirtsName.value = splitName.first_name;
+                    equipmentLastName.value = splitName.last_name;
+                    equipmentSecondName.value = splitName.middle_name;
                     equipmentResponsiblePosition.value = props.oldData.equipment_responsible_position;
                     
                     selectedDivision.value = { 

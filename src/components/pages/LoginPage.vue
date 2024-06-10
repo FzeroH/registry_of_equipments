@@ -1,13 +1,13 @@
 <template>
-  <div class="login-form">  
-    <h2>Войти/зарегистрироваться</h2>
+  <div class="login-form"> 
+    <h2>Войти</h2>
     <h3 v-if="error" class="error">{{error}}</h3>
     <h3 v-if="succsess" class="succsess">{{succsess}}</h3>
     <input type="text" placeholder="Логин" v-model="username">
     <input type="password" placeholder="Пароль" v-model="password">
     <div class="button-block">
         <button @click="login">Войти</button>
-        <button @click="registration">Зарегистрироваться</button>
+        <!-- <button @click="registration">Зарегистрироваться</button> -->
     </div>
   </div>
 </template>
@@ -33,6 +33,7 @@ export default {
                 EquipmentService.login(username.value, password.value)
                 .then(res => {
                     localStorage.setItem('user_id',res.user_id)
+                    localStorage.setItem('role_id',res.role_id)
                     router.push('/main')
                 })
                 .catch(e => {
