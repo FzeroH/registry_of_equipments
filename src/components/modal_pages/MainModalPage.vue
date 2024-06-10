@@ -127,11 +127,6 @@ import EquipmentService from '@/api/EquipmentService';
             }
 
             onMounted(()=> {
-                EquipmentService.getEquipmentTypeList().then(res => {
-                    res.forEach(elem => {
-                        typesList.value.push(elem)
-                    });
-                })
                 EquipmentService.getEquipmentStatusList().then(res => {
                     res.forEach(elem => {
                         statusList.value.push(elem)

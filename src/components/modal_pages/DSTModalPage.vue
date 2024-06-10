@@ -75,15 +75,15 @@ import { useRoute } from 'vue-router';
             const addNewName = async () => {
                 try {
                     if(route.path === '/division') {
-                        EquipmentService.addDivision(divisionName.value)
+                        await EquipmentService.addDivision(divisionName.value)
                     }
 
                     if(route.path === '/type') {
-                        EquipmentService.addEquipmentType(equipmentTypeName.value)
+                        await EquipmentService.addEquipmentType(equipmentTypeName.value)
                     }
 
                     if(route.path === '/status') {
-                        EquipmentService.addEquipmentStatus(equipmentStatusName.value)
+                        await EquipmentService.addEquipmentStatus(equipmentStatusName.value)
                     }
                 }
                 catch(e) {
@@ -99,15 +99,15 @@ import { useRoute } from 'vue-router';
                 
                 try {
                     if(route.path === '/division') {
-                        EquipmentService.updateDivision(props.oldData.division_id, divisionName.value)
+                        await EquipmentService.updateDivision(props.oldData.division_id, divisionName.value)
                     }
 
                     if(route.path === '/type') {
-                        EquipmentService.updateEquipmentType(props.oldData.equipment_type_id, equipmentTypeName.value)
+                        await EquipmentService.updateEquipmentType(props.oldData.equipment_type_id, equipmentTypeName.value)
                     }
 
                     if(route.path === '/status') {
-                        EquipmentService.updateEquipmentStatus(props.oldData.equipment_status_id, equipmentStatusName.value)
+                        await EquipmentService.updateEquipmentStatus(props.oldData.equipment_status_id, equipmentStatusName.value)
                     }
                 }
                 catch(e) {
