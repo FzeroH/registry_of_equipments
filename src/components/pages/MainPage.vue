@@ -5,14 +5,23 @@
       <input v-model="search" type="text" class="search__input" @keydown.enter="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
       <input type="button" value="Поиск" class="search__btn" @click="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
     </div>
+    <div class="button-container">
+        <button
+        v-if="isAdmin || isEmployee"
+        type="submit"
+        class="add_row"
+        title="Добавить оборудование"
+        @click="showModal"
+      ></button>
 
-    <button
-      v-if="isAdmin || isEmployee"
-      type="submit"
-      class="add_row"
-      title="Добавить оборудование"
-      @click="showModal"
-    ></button>
+      <button
+        v-if="isAdmin || isEmployee"
+        type="submit"
+        class="btn_download"
+        title="Сформировать ведомость"
+        @click="downloadDocument"
+      ></button>
+    </div>
 
     <VueTableLite
       :is-loading="table.isLoading"
@@ -64,7 +73,7 @@ export default {
     const isNewEquipment = ref(true);
     const oldData = ref(null);
     const search = ref(props.search);
-
+    // TODO: для загрузки данных в файл необходимо из search вытащить информацию и передать её на бэк в функцию generateDoc...
     const equipmentList = ref([]);
     // Инициализация настроек таблицы
     const table = reactive({
@@ -195,6 +204,10 @@ export default {
       console.log(row);
     });
 
+    const downloadDocument = async () => {
+      await EquipmentService.downloadFile(search.value);
+    };
+
     const showModal = () => {
       isNewEquipment.value = true;
       isVisible.value = true;
@@ -213,6 +226,7 @@ export default {
       isVisible,
       showModal,
       closeModal,
+      downloadDocument,
       isNewEquipment,
       oldData,
       isAdmin,
@@ -231,6 +245,14 @@ export default {
   height: 100%;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-content: end;
+  margin-right: 10px;
+}
+
 .table {
   margin: auto;
 }
@@ -243,12 +265,23 @@ export default {
   background: none;
   background-image: url("../../assets/add-circle-svgrepo-com.svg");
   background-size: cover;
-  margin-left: auto;
-  margin-bottom: 10px;
-  margin-right: 10px;
 }
 
 .add_row:hover {
+  cursor: pointer;
+}
+
+.btn_download {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  background-image: url("../../assets/download_icon.svg");
+  background-size: cover;
+}
+
+.btn_download:hover {
   cursor: pointer;
 }
 

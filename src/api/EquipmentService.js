@@ -209,6 +209,22 @@ class EquipmentService {
         .then((res) => resolve(res.data))
         .catch((e) => reject(e));
     });
+
+    static downloadFile = (search) =>
+      new Promise((resolve, reject) => {
+        instance()
+          .get("/download", { params: { search } })
+          .then(() => {
+            const url = 'http://localhost:3000'
+            const link = document.createElement('a');
+            link.setAttribute('href', `${url}/download?search=${search}`);
+            link.setAttribute('download', 'test.docx');
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          })
+          .catch((e) => reject(e));
+      });
 }
 
 export default EquipmentService;
