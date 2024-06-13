@@ -33,15 +33,15 @@
             </label>
             <label for="date_registration">
                 <input id="date_registration" 
-                type="date" 
-                placeholder="Дата принятия к учету" 
+                type="date"
+                placeholder="Дата принятия к учету:" 
                 v-model="dateRegistration"
                  class="equipment-field">
             </label>
             <label for="date_de_registration">
                 <input id="date_de_registration" 
                 type="date" 
-                placeholder="Дата снятия с учета" 
+                placeholder="Дата снятия с учета:" 
                 v-model="dateDeRegistration"
                  class="equipment-field">
             </label>
@@ -104,7 +104,6 @@ import EquipmentService from '@/api/EquipmentService';
             const dateDeRegistration = ref (null);
 
             /* Массивы данных, полученных из базы */
-            const typesList = ref([]);
             const statusList = ref([]);
             const responsibleList = ref([]);
 
@@ -135,7 +134,7 @@ import EquipmentService from '@/api/EquipmentService';
             await EquipmentService.addEquipment(
                 data.selectedStatus.equipment_status_id, 
                 localStorage.getItem('user_id'),
-                data.selectedResponsible.user_id, 
+                data.selectedResponsible.responsible_id, 
                 data.equipmentName, 
                 data.inventoryNumber,
                 data.balance_cost,
@@ -159,7 +158,7 @@ import EquipmentService from '@/api/EquipmentService';
             };
 
                 try {
-                    console.log(data);
+                    console.log(data.selectedResponsible);
                     await EquipmentService.updateEquipment(props.oldData.equipment_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.responsible_id, data.equipmentName, data.inventoryNumber, data.balance_cost, data.quantity, data.date_registration, data.date_de_registration)
                 }
                 catch(e) {
@@ -174,27 +173,29 @@ import EquipmentService from '@/api/EquipmentService';
 
             onMounted(async ()=> {
                 await EquipmentService.getEquipmentStatusList().then(res => {
+                    selectedStatus.value = null;
                     res.forEach(elem => {
                         statusList.value.push(elem)
                     });
                 })
                 await EquipmentService.getEquipmentResponsibleList().then(res => {
+                    selectedResponsible.value = null;
                     res.forEach(elem => {
                         responsibleList.value.push(elem)
                     });
                 })
                 
                 if(props.oldData) {
-                    console.log(JSON.stringify(props.oldData))
+                    console.log(props.oldData)
                     equipmentName.value = props.oldData.equipment_name;
                     inventoryNumber.value = props.oldData.inventory_number;
-                    balanceCost.value = props.oldData.balance_cost.split(' ')[0];
+                    balanceCost.value = props.oldData.balance_cost;
                     quantity.value = props.oldData.quantity;
                     dateRegistration.value = props.oldData.date_registration;
                     dateDeRegistration.value = props.oldData.date_de_registration;
                     selectedResponsible.value = { 
                         responsible_id: props.oldData.responsible_id,
-                        equipment_responsible_full_name: props.oldData.responsible_fullname,
+                        equipment_responsible_full_name: props.oldData.responsible_full_name,
                         division_id: props.oldData.division_id,
                         division_name: props.oldData.division_name
                     };
@@ -219,7 +220,6 @@ import EquipmentService from '@/api/EquipmentService';
                 closeModal, 
                 addEquipment, 
                 updateEqipment,
-                typesList, 
                 statusList, 
                 responsibleList,
             }
@@ -295,5 +295,39 @@ import EquipmentService from '@/api/EquipmentService';
         transition: 0.5 ease;
         background: #314483;
     }
+
+input[type="date"] {
+  position: relative;
+  user-select: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background: transparent;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-clear-button {
+  z-index: -10;
+}
+
+input[type="date"]::-webkit-input-placeholder {
+  z-index: 99;
+}
+
+input[type="date"]:placeholder {
+  z-index: 99;
+}
+input[type="date"]:not(.has-value):before {
+  content: attr(placeholder);
+  width: 100%;
+}
 
 </style>

@@ -73,7 +73,7 @@ export default {
     const isNewEquipment = ref(true);
     const oldData = ref(null);
     const search = ref(props.search);
-    // TODO: для загрузки данных в файл необходимо из search вытащить информацию и передать её на бэк в функцию generateDoc...
+
     const equipmentList = ref([]);
     // Инициализация настроек таблицы
     const table = reactive({
@@ -101,7 +101,7 @@ export default {
         },
         {
           label: "Мат. ответственный",
-          field: "responsible_fullname",
+          field: "responsible_full_name",
           width: "15%",
           sortable: true,
           headerStyles: { background: "#1c274c" },
@@ -114,7 +114,7 @@ export default {
           headerStyles: { background: "#1c274c" },
         },
         {
-          label: "Балансовая стоимость",
+          label: "Балансовая стоимость, руб.",
           field: "balance_cost",
           width: "15%",
           sortable: true,

@@ -34,7 +34,7 @@ export default {
             columns: [
             {
                 label: 'ID',
-                field: 'user_id',
+                field: 'responsible_id',
                 width: '3%',
                 sortable: false,
                 isKey: true,
