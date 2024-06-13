@@ -15,7 +15,7 @@
             @row-clicked="rowClicked"
             class="table">
         </VueTableLite>
-        <UserModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewName="isNewName" :oldData="oldData" />
+        <UserModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewUser="isNewUser" :oldData="oldData" />
     </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
     },
     setup() {
         const isVisible = ref(false);
-        const isNewName = ref(true);
+        const isNewUser = ref(true);
         const oldData = ref('');
 
         const typeList = ref([]);
@@ -114,13 +114,13 @@ export default {
 
         const rowClicked = (row) => {
             oldData.value = row;
-            isNewName.value = false;
+            isNewUser.value = false;
             isVisible.value = true;
             console.log(row);
         };
 
         const showModal = () => {
-            isNewName.value = true;
+            isNewUser.value = true;
             isVisible.value = true;
         };
 
@@ -130,7 +130,7 @@ export default {
             oldData.value = '';
         };
 
-        return { table, rowClicked, isVisible, showModal, closeModal, isNewName, oldData }
+        return { table, rowClicked, isVisible, showModal, closeModal, isNewUser, oldData }
     },
 }
 </script>

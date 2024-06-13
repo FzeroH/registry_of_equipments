@@ -1,29 +1,42 @@
-
 <template>
     <div class="modal" v-if="showModal">
         <div class="modal-content">
-            <h2 v-if="isNewResponsible">Добавить мат. ответственного</h2>
-            <h2 v-else>Изменить данные мат. ответственного</h2>
+            <h2 v-if="isNewUser">Добавить пользователя</h2>
+            <h2 v-else>Изменить данные пользователя</h2>
             
-            <label for="first_name">
-                <input id="first_name"
+            <label v-if="isNewUser" for="login">
+                <input id="login" 
                 type="text" 
-                placeholder="Введите имя ответственного" 
-                v-model="equipmentFirtsName"
+                placeholder="Введите логин пользователя" 
+                v-model="login"
+                 class="equipment-field">
+            </label>
+            <label for="password">
+                <input v-if="isNewUser" id="password" 
+                type="text" 
+                placeholder="Введите пароль" 
+                v-model="password"
                  class="equipment-field">
             </label>
             <label for="last_name">
                 <input id="last_name" 
                 type="text" 
-                placeholder="Введите фамилию ответственного" 
-                v-model="equipmentLastName"
+                placeholder="Введите фамилию пользователя" 
+                v-model="lastName"
+                 class="equipment-field">
+            </label>
+            <label for="first_name">
+                <input id="first_name"
+                type="text" 
+                placeholder="Введите имя пользователя" 
+                v-model="firstName"
                  class="equipment-field">
             </label>
             <label for="middle_name">
                 <input id="middle_name" 
                 type="text" 
-                placeholder="Введите отчество ответственного" 
-                v-model="equipmentSecondName"
+                placeholder="Введите отчество пользователя" 
+                v-model="middleName"
                  class="equipment-field">
             </label>
 
@@ -31,10 +44,14 @@
                 <option :value="null" disabled selected>{{ baseData.divisionName }}</option>
                 <option v-for="(item, index) in divisionList" :value="item" :key="index" >{{ item.division_name }}</option>
             </select>
+            <select v-model="selectedRole" id="role" class="equipment-field">
+                <option :value="null" disabled selected>{{ baseData.roleName }}</option>
+                <option v-for="(item, index) in roleList" :value="item" :key="index" >{{ item.role_name }}</option>
+            </select>
 
             <div class="button-block">
-                <button @click="addEquipmentResponsible" v-if="isNewResponsible">Добавить</button>
-                <button @click="updateEquipmentResponsible" v-if="!isNewResponsible">Изменить</button>
+                <button @click="registration" v-if="isNewUser">Добавить</button>
+                <button @click="updateUser" v-if="!isNewUser">Изменить</button>
                 <button @click="closeModal">Закрыть</button> 
             </div>
         </div>
@@ -53,7 +70,7 @@ import EquipmentService from '@/api/EquipmentService';
                 type: Boolean,
                 default: false,
             },
-            isNewResponsible: {
+            isNewUser: {
                 type: Boolean,
                 default: false,
             },
@@ -66,36 +83,54 @@ import EquipmentService from '@/api/EquipmentService';
             /* данные для заполнения первой строки */
             const baseData = {
                 divisionName: 'Выберете структурное подразделение',
+                roleName: 'Выберете роль пользователя',
             }
 
             /* переменные для получения информации из формы */
-            const equipmentFirtsName = ref('');
-            const equipmentLastName = ref('');
-            const equipmentSecondName = ref('');
+            const login = ref('');
+            const password = ref();
+            const firstName = ref('');
+            const lastName = ref('');
+            const middleName = ref('');
             const selectedDivision = ref(null);
+            const selectedRole = ref(null);
 
             /* Массивы данных, полученных из базы */
             const divisionList = ref([]);
+            const roleList = ref([]);
 
             const closeModal = () => {
-                equipmentFirtsName.value = '';
-                equipmentLastName.value = '';
-                equipmentSecondName.value = '';
+                login.value = '';
+                password.value = '';
+                firstName.value = '';
+                lastName.value = '';
+                middleName.value = '';
                 selectedDivision.value = null;
+                selectedRole.value = null;
                 emit('closeModal', false);
             }
             
-            const addEquipmentResponsible = async () => {
+            const registration = async () => {
                 const data = {
-                    equipmentFirtsName: equipmentFirtsName.value,
-                    equipmentLastName: equipmentLastName.value,
-                    equipmentSecondName: equipmentSecondName.value,
-                    selectedDivision: selectedDivision.value,
+                    role_id: selectedRole.value,
+                    division_id: selectedDivision.value,
+                    login: login.value,
+                    password: password.value,
+                    firstName: firstName.value,
+                    lastName: lastName.value,
+                    middleName: middleName.value,
             };
             try {
                 // console.log(data)
-                await EquipmentService.addEquipmentResponsible(
-                data.selectedDivision.division_id,data.equipmentFirtsName, data.equipmentSecondName, data.equipmentLastName,);
+                await EquipmentService.registration(
+                data.role_id.role_id,
+                data.division_id.division_id,
+                data.login,
+                data.password,
+                data.firstName, 
+                data.lastName,
+                data.middleName 
+                );
             }
             catch(e) {
                     console.log(e);
@@ -105,16 +140,24 @@ import EquipmentService from '@/api/EquipmentService';
                 window.location.reload();
             }
         }
-            const updateEquipmentResponsible = async () => {
+            const updateUser = async () => {
                 const data = {
-                    equipmentFirtsName: equipmentFirtsName.value,
-                    equipmentLastName: equipmentLastName.value,
-                    equipmentSecondName: equipmentSecondName.value,
-                    selectedDivision: selectedDivision.value,
+                    role_id: selectedRole.value,
+                    division_id: selectedDivision.value,
+                    firstName: firstName.value,
+                    lastName: lastName.value,
+                    middleName: middleName.value,
             };
 
                 try {
-                    await EquipmentService.updateUser(props.oldData.user_id, props.oldData.role_id,data.selectedDivision.division_id, props.oldData.login, data.equipmentFirtsName, data.equipmentLastName, data.equipmentSecondName)
+                    await EquipmentService.updateUser(
+                        props.oldData.user_id, 
+                        data.role_id.role_id,
+                        data.division_id.division_id, 
+                        props.oldData.login,
+                        data.firstName, 
+                        data.lastName, 
+                        data.middleName)
                 }
                 catch(e) {
                     console.log(e);
@@ -132,28 +175,43 @@ import EquipmentService from '@/api/EquipmentService';
                     });
                 })
 
+                await EquipmentService.getRoleList().then(res => {
+                    res.forEach(elem => {
+                        roleList.value.push(elem)
+                    });
+                })
+
                 if(props.oldData) {
-                    equipmentFirtsName.value = props.oldData.first_name;
-                    equipmentLastName.value = props.oldData.last_name;
-                    equipmentSecondName.value = props.oldData.middle_name;
+                    firstName.value = props.oldData.first_name;
+                    lastName.value = props.oldData.last_name;
+                    middleName.value = props.oldData.middle_name;
                     
                     selectedDivision.value = { 
                         division_id: props.oldData.division_id,
                         division_name: props.oldData.division_name,
                     };
+                    selectedRole.value = { 
+                        role_id: props.oldData.role_id,
+                        role_name: props.oldData.role_name,
+                    };
                 }
             }) 
         
             return {
-                equipmentFirtsName,
-                equipmentLastName,
-                equipmentSecondName,
+                firstName,
+                lastName,
+                middleName,
                 selectedDivision,
+                selectedRole,
                 baseData, 
+                selectedRole,
+                login,
+                password,
                 closeModal, 
-                addEquipmentResponsible, 
-                updateEquipmentResponsible,
-                divisionList
+                registration, 
+                updateUser,
+                divisionList,
+                roleList
             }
         }
     }

@@ -2,7 +2,7 @@
   <div class="main-container">
 
     <div class="search">
-      <input v-model="search" type="text" class="search__input" @keydown.enter="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
+      <input v-model="search" type="text" class="search__input" placeholder="Поиск" @keydown.enter="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
       <input type="button" value="Поиск" class="search__btn" @click="() => doSearch(0, 10, table.sortable.order, table.sortable.sort)" />
     </div>
     <div class="button-container">
@@ -293,9 +293,28 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
-
-  &__input {
-    width: 50%;
-  }
 }
+.search__input {
+    width: 50%;
+    height: 30px;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 5px;
+    outline: none;
+  }
+  .search__btn {
+    background: #1c274c;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 20px;
+    transition: 0.5s ease;
+    margin-left: 5px;
+  }
+  .search__btn:hover {
+    cursor: pointer;
+    transition: 0.5 ease;
+    background: #314483;
+  }
 </style>

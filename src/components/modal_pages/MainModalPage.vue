@@ -9,27 +9,51 @@
                 placeholder="Введите название оборудования" 
                 v-model="equipmentName"
                  class="equipment-field">
-            </label><label for="input2">
+            </label>
+            <label for="inventory_number">
                 <input id="inventory_number" 
                 type="text" 
                 placeholder="Введите инвентарный номер оборудования" 
                 v-model="inventoryNumber"
                  class="equipment-field">
             </label>
+            <label for="balance_cost">
+                <input id="balance_cost" 
+                type="text" 
+                placeholder="Введите стоимость оборудования" 
+                v-model="balanceCost"
+                 class="equipment-field">
+            </label>
+            <label for="quantity">
+                <input id="quantity" 
+                type="text" 
+                placeholder="Введите количество оборудования" 
+                v-model="quantity"
+                 class="equipment-field">
+            </label>
+            <label for="date_registration">
+                <input id="date_registration" 
+                type="date" 
+                placeholder="Дата принятия к учету" 
+                v-model="dateRegistration"
+                 class="equipment-field">
+            </label>
+            <label for="date_de_registration">
+                <input id="date_de_registration" 
+                type="date" 
+                placeholder="Дата снятия с учета" 
+                v-model="dateDeRegistration"
+                 class="equipment-field">
+            </label>
             
             <select v-model="selectedResponsible" id="equipment_responsible_full_name" class="equipment-field">
                 <option :value="null" disabled selected>{{ baseData.equipmentResponsibleFullName }}</option>
-                <option v-for="(item, index) in responsibleList" :value="item" :key="index" >{{ item.equipment_responsible_full_name }}</option>  <!--({{ item.equipment_responsible_position }}) -->
+                <option v-for="(item, index) in responsibleList" :value="item" :key="index" >{{ item.equipment_responsible_full_name }}</option>
             </select>
 
             <select v-model="selectedStatus" id="equipment_status_name" class="equipment-field">
                 <option :value="null" disabled selected>{{ baseData.equipmentStatusName }}</option>
                 <option v-for="(item, index) in statusList" :value="item" :key="index" >{{ item.equipment_status_name }}</option>
-            </select>
-
-            <select v-model="selectedType" id="equipment_type_name" class="equipment-field">
-                <option :value="null" disabled selected>{{ baseData.equipmentTypeName }}</option>
-                <option v-for="(item, index) in typesList" :value="item" :key="index" >{{ item.equipment_type_name }}</option>
             </select>
 
             <div class="button-block">
@@ -67,15 +91,17 @@ import EquipmentService from '@/api/EquipmentService';
             const baseData = {
                 equipmentResponsibleFullName: 'ФИО мат. ответственного',
                 equipmentStatusName: 'Статус оборудования',
-                equipmentTypeName: 'Тип оборудования',
             }
 
             /* переменные для получения информации из формы */
             const equipmentName = ref('');
             const inventoryNumber = ref('');
-            const selectedType = ref(null);
+            const balanceCost = ref('');
+            const quantity = ref('');
             const selectedStatus = ref(null);
             const selectedResponsible = ref(null);
+            const dateRegistration = ref (null);
+            const dateDeRegistration = ref (null);
 
             /* Массивы данных, полученных из базы */
             const typesList = ref([]);
@@ -85,9 +111,12 @@ import EquipmentService from '@/api/EquipmentService';
             const closeModal = () => {
                 equipmentName.value = '';
                 inventoryNumber.value = '';
-                selectedType.value = null;
+                balanceCost.value = '';
+                quantity.value = '';
                 selectedStatus.value = null;
                 selectedResponsible.value = null;
+                dateRegistration.value = null;
+                dateDeRegistration.value = null;
                 emit('closeModal', false);
             }
             
@@ -95,12 +124,25 @@ import EquipmentService from '@/api/EquipmentService';
                 const data = {
                 equipmentName: equipmentName.value,
                 inventoryNumber: inventoryNumber.value,
-                selectedType: selectedType.value,
+                balance_cost: balanceCost.value,
+                quantity: quantity.value,
                 selectedStatus: selectedStatus.value,
                 selectedResponsible: selectedResponsible.value,
+                date_registration: dateRegistration.value,
+                date_de_registration: dateDeRegistration.value,
             };
 
-            await EquipmentService.addEquipment(data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber, localStorage.getItem('user_id')); 
+            await EquipmentService.addEquipment(
+                data.selectedStatus.equipment_status_id, 
+                localStorage.getItem('user_id'),
+                data.selectedResponsible.user_id, 
+                data.equipmentName, 
+                data.inventoryNumber,
+                data.balance_cost,
+                data.quantity,
+                data.date_registration,
+                data.date_de_registration,
+            ); 
             closeModal();
             window.location.reload();
         }
@@ -108,13 +150,17 @@ import EquipmentService from '@/api/EquipmentService';
                 const data = {
                 equipmentName: equipmentName.value,
                 inventoryNumber: inventoryNumber.value,
-                selectedType: selectedType.value,
+                balance_cost: balanceCost.value,
+                quantity: quantity.value,
                 selectedStatus: selectedStatus.value,
                 selectedResponsible: selectedResponsible.value,
+                date_registration: dateRegistration.value,
+                date_de_registration: dateDeRegistration.value ? dateDeRegistration.value : null,
             };
 
                 try {
-                    EquipmentService.updateEquipment(props.oldData.equipment_id,data.selectedType.equipment_type_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.equipment_responsible_id, data.equipmentName, data.inventoryNumber)
+                    console.log(data);
+                    await EquipmentService.updateEquipment(props.oldData.equipment_id,data.selectedStatus.equipment_status_id, data.selectedResponsible.responsible_id, data.equipmentName, data.inventoryNumber, data.balance_cost, data.quantity, data.date_registration, data.date_de_registration)
                 }
                 catch(e) {
                     console.log(e);
@@ -126,13 +172,13 @@ import EquipmentService from '@/api/EquipmentService';
 
             }
 
-            onMounted(()=> {
-                EquipmentService.getEquipmentStatusList().then(res => {
+            onMounted(async ()=> {
+                await EquipmentService.getEquipmentStatusList().then(res => {
                     res.forEach(elem => {
                         statusList.value.push(elem)
                     });
                 })
-                EquipmentService.getEquipmentResponsibleList().then(res => {
+                await EquipmentService.getEquipmentResponsibleList().then(res => {
                     res.forEach(elem => {
                         responsibleList.value.push(elem)
                     });
@@ -142,20 +188,19 @@ import EquipmentService from '@/api/EquipmentService';
                     console.log(JSON.stringify(props.oldData))
                     equipmentName.value = props.oldData.equipment_name;
                     inventoryNumber.value = props.oldData.inventory_number;
+                    balanceCost.value = props.oldData.balance_cost.split(' ')[0];
+                    quantity.value = props.oldData.quantity;
+                    dateRegistration.value = props.oldData.date_registration;
+                    dateDeRegistration.value = props.oldData.date_de_registration;
                     selectedResponsible.value = { 
-                        equipment_responsible_id: props.oldData.equipment_responsible_id,
-                        equipment_responsible_full_name: props.oldData.equipment_responsible_full_name,
+                        responsible_id: props.oldData.responsible_id,
+                        equipment_responsible_full_name: props.oldData.responsible_fullname,
                         division_id: props.oldData.division_id,
-                        division_name: props.oldData.division_name,
-                        equipment_responsible_position: props.oldData.equipment_responsible_position,
+                        division_name: props.oldData.division_name
                     };
                     selectedStatus.value = { 
                         equipment_status_id: props.oldData.equipment_status_id,
                         equipment_status_name: props.oldData.equipment_status_name,
-                    };
-                    selectedType.value = { 
-                        equipment_type_id: props.oldData.equipment_type_id,
-                        equipment_type_name: props.oldData.equipment_type_name,
                     };
                 }
             }) 
@@ -163,11 +208,14 @@ import EquipmentService from '@/api/EquipmentService';
             return {
                 equipmentName,
                 inventoryNumber,
-                selectedType,
                 selectedStatus,
                 selectedResponsible,
                 inventoryNumber, 
-                baseData, 
+                baseData,
+                balanceCost,
+                quantity,
+                dateRegistration,
+                dateDeRegistration,
                 closeModal, 
                 addEquipment, 
                 updateEqipment,

@@ -16,20 +16,20 @@
             class="table">
         </VueTableLite>
     </div>
-    <DSTModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewName="isNewName" :oldData="oldData" />
+    <DSModalPage v-if="isVisible" :showModal="isVisible" @closeModal="closeModal" :isNewName="isNewName" :oldData="oldData" />
 </template>
 
 <script>
 import VueTableLite from 'vue3-table-lite';
 import { ref, reactive, onMounted } from 'vue';
 import EquipmentService from '@/api/EquipmentService';
-import DSTModalPage from '../modal_pages/DSTModalPage.vue';
+import DSModalPage from '../modal_pages/DSModalPage.vue';
 
 export default {
     name: 'StatusPage',
     components: { 
         VueTableLite,
-        DSTModalPage,
+        DSModalPage,
     },
     setup() {
         const isVisible = ref(false);

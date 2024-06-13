@@ -71,6 +71,7 @@ class EquipmentService {
         .then((res) => resolve(res.data))
         .catch((e) => reject(e));
     });
+
   static getUserList = () =>
     new Promise((resolve, reject) => {
       instance()
@@ -79,24 +80,37 @@ class EquipmentService {
         .catch((e) => reject(e));
     });
 
+  static getRoleList = () =>
+    new Promise((resolve, reject) => {
+      instance()
+        .get("/role")
+        .then((res) => resolve(res.data))
+        .catch((e) => reject(e));
+    });
   /* Добавить данные */
   static addEquipment = (
-    equipment_type_id,
     equipment_status_id,
-    equipment_responsible_id,
+    user_id,
+    responsible_id,
     equipment_name,
     inventory_number,
-    user_id
+    balance_cost,
+    quantity,
+    date_registration,
+    date_de_registration
   ) =>
     new Promise((resolve, reject) => {
       instance()
         .post("/equipments", {
-          equipment_type_id,
           equipment_status_id,
-          equipment_responsible_id,
+          user_id,
+          responsible_id,
           equipment_name,
           inventory_number,
-          user_id,
+          balance_cost,
+          quantity,
+          date_registration,
+          date_de_registration
         })
         .then((res) => resolve(res.data))
         .catch((e) => reject(e));
@@ -141,21 +155,27 @@ class EquipmentService {
   /* Обновить данные */
   static updateEquipment = (
     equipment_id,
-    equipment_type_id,
-    equipment_status_id,
-    equipment_responsible_id,
-    equipment_name,
-    inventory_number
+    equipment_status_id , 
+    responsible_id, 
+    equipment_name, 
+    inventory_number,
+    balance_cost,
+    quantity, 
+    date_registration, 
+    date_de_registration
   ) =>
     new Promise((resolve, reject) => {
       instance()
         .put("/equipments", {
           equipment_id,
-          equipment_type_id,
-          equipment_status_id,
-          equipment_responsible_id,
-          equipment_name,
+          equipment_status_id , 
+          responsible_id, 
+          equipment_name, 
           inventory_number,
+          balance_cost,
+          quantity, 
+          date_registration, 
+          date_de_registration
         })
         .then((res) => resolve(res.data))
         .catch((e) => reject(e));
@@ -215,7 +235,9 @@ class EquipmentService {
         instance()
           .get("/download", { params: { search } })
           .then(() => {
-            const url = 'http://localhost:3000'
+            
+            // const url = 'http://45.140.19.41:3000';
+            const url = 'http://localhost:3000';
             const link = document.createElement('a');
             link.setAttribute('href', `${url}/download?search=${search}`);
             link.setAttribute('download', 'test.docx');
