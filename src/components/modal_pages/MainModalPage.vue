@@ -83,7 +83,7 @@ import EquipmentService from '@/api/EquipmentService';
             },
             oldData: {
                 type: Object,
-                default: null,
+                default: () => null,
             },
         },
         setup(props, { emit }) {
@@ -177,16 +177,18 @@ import EquipmentService from '@/api/EquipmentService';
                     res.forEach(elem => {
                         statusList.value.push(elem)
                     });
+                    console.log(statusList.value)
                 })
                 await EquipmentService.getEquipmentResponsibleList().then(res => {
                     selectedResponsible.value = null;
                     res.forEach(elem => {
                         responsibleList.value.push(elem)
                     });
+                    console.log(responsibleList.value)
                 })
                 
                 if(props.oldData) {
-                    console.log(props.oldData)
+                    console.log('OldData:', props.oldData)
                     equipmentName.value = props.oldData.equipment_name;
                     inventoryNumber.value = props.oldData.inventory_number;
                     balanceCost.value = props.oldData.balance_cost;

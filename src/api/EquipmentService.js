@@ -236,8 +236,8 @@ class EquipmentService {
           .get("/download", { params: { search } })
           .then(() => {
             
-            // const url = 'http://45.140.19.41:3000';
-            const url = 'http://localhost:3000';
+            const url = 'http://45.140.19.41:3000';
+            // const url = 'http://localhost:3000';
             const link = document.createElement('a');
             link.setAttribute('href', `${url}/download?search=${search}`);
             link.setAttribute('download', 'test.docx');

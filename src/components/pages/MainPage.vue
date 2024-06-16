@@ -11,7 +11,7 @@
         type="submit"
         class="add_row"
         title="Добавить оборудование"
-        @click="showModal"
+        @click="() => showModal()"
       ></button>
 
       <button
@@ -49,7 +49,7 @@
 
 <script>
 import VueTableLite from "vue3-table-lite";
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 import EquipmentService from "@/api/EquipmentService";
 import MainModalPage from "../modal_pages/MainModalPage.vue";
 import { checkIsAdmin, checkIsEmployee } from "@/utils";
@@ -201,16 +201,16 @@ export default {
       oldData.value = row;
       isNewEquipment.value = false;
       isVisible.value = true;
-      console.log(row);
     });
 
     const downloadDocument = async () => {
       await EquipmentService.downloadFile(search.value);
     };
 
-    const showModal = () => {
+    const showModal = (row = null) => {
       isNewEquipment.value = true;
       isVisible.value = true;
+      oldData.value = row;
     };
 
     const closeModal = () => {
